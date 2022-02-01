@@ -28,10 +28,10 @@ This page is used by managers for Oversee their team members time entries and Tr
 4. HTML5
 5. Firebase
 6. JavaScript ES6
-7. Node.js 16.6.1
-8. Node Package Manager 7.20.3
+7. Node.js 
+8. Node Package Manager 
 9. React 
-10. React Scripts 3.2.0
+10. React Scripts 
 11. NoSQL
 
 ## Setup/Installation Requirements
