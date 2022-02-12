@@ -65,7 +65,8 @@ Run `npm install` in the git BASH terminal to install dependencies.
 * 10:45: searching for connect react js with MySql database
   [https://www.youtube.com/watch?v=T8mqZZ0r-RA](https://www.youtube.com/watch?v=T8mqZZ0r-RA)
   [https://www.youtube.com/watch?v=3YrOOia3-mo](https://www.youtube.com/watch?v=3YrOOia3-mo)   
-
+* 11:30: searching for `moment` for date format
+  [https://www.youtube.com/watch?v=ihVLWyc6BO4](https://www.youtube.com/watch?v=ihVLWyc6BO4)
 
 ## Known bugs
 
