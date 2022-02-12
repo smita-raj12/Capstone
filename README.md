@@ -56,7 +56,8 @@ Run `npm install` in the git BASH terminal to install dependencies.
 * 9:45: searching for resource 
 * 10:30: searching on how to use Bootstrap
 * 11:30: searching on how to create API.
-
+* 9:30: searching on form validation for login page
+   [https://joi.dev/api/?v=17.6.0](https://joi.dev/api/?v=17.6.0)
 ## Known bugs
 
 If any bugs arrives should go here 
