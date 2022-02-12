@@ -58,6 +58,11 @@ Run `npm install` in the git BASH terminal to install dependencies.
 * 11:30: searching on how to create API.
 * 9:30: searching on form validation for login page
    [https://joi.dev/api/?v=17.6.0](https://joi.dev/api/?v=17.6.0)
+* 10:45: searching for connect react js with MySql database
+  [https://www.youtube.com/watch?v=T8mqZZ0r-RA](https://www.youtube.com/watch?v=T8mqZZ0r-RA)
+  [https://www.youtube.com/watch?v=3YrOOia3-mo](https://www.youtube.com/watch?v=3YrOOia3-mo)   
+
+  
 ## Known bugs
 
 If any bugs arrives should go here 
