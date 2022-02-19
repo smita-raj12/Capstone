@@ -68,6 +68,14 @@ Run `npm install` in the git BASH terminal to install dependencies.
 * 11:30: searching for `moment` for date format
   [https://www.youtube.com/watch?v=ihVLWyc6BO4](https://www.youtube.com/watch?v=ihVLWyc6BO4)
 
+
+#### fri, 02/18/2022
+
+* searching for adding search bar functionality [https://www.youtube.com/watch?v=x7niho285qs&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=14](https://www.youtube.com/watch?v=x7niho285qs&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=14)
+
+* searching for react hooks [https://www.youtube.com/watch?v=LlvBzyy-558](https://www.youtube.com/watch?v=LlvBzyy-558)
+
+
 ## Known bugs
 
 If any bugs arrives should go here 
