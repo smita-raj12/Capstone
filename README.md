@@ -75,7 +75,11 @@ Run `npm install` in the git BASH terminal to install dependencies.
 
 * searching for react hooks [https://www.youtube.com/watch?v=LlvBzyy-558](https://www.youtube.com/watch?v=LlvBzyy-558)
 
+* searching for icons [https://mui.com/components/material-icons/](https://mui.com/components/material-icons/)
 
+* searching for navbar [https://www.youtube.com/watch?v=nLTMn19vupw&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=8](https://www.youtube.com/watch?v=nLTMn19vupw&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=8)
+
+* searching for icons [https://mui.com/components/material-icons/?query=close](https://mui.com/components/material-icons/?query=close)
 ## Known bugs
 
 If any bugs arrives should go here 
