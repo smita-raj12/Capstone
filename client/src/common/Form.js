@@ -22,6 +22,7 @@ class Form extends Component {
     this.doSubmit();
   };
 
+    
   renderButton(label) {
     return (
       <button className="btn btn-primary mt-3">
@@ -56,10 +57,13 @@ class Form extends Component {
         readOnly={readOnly}
         value={data[name]}
         onChange={this.handleChange}
-        error={errors[name]}
+        
       />
     );
   }
+  
+    
+  
 }
 
 export default Form;
