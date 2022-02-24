@@ -26,8 +26,8 @@ class TimeEntryForm extends Form {
       };
     
     doSubmit = async () => {
-        // console.log("doSubmit");
-        this.props.onSave(this.state.data);
+        console.log("doSubmit");
+        
     };
 
     handleSelect(workOrderId) {
@@ -49,19 +49,59 @@ class TimeEntryForm extends Form {
         };
     }
     
+    customValidation = (input) => {
+        const { date } = this.state.data;
+    
+        var customError = " ";
+        var totalHoursperday = 0;
+    
+        const origionaltimeEntries = this.state.timeEntries;
+        // console.log("origionaltimeEntries", origionaltimeEntries);
+        const timeEntriesforthedate = origionaltimeEntries.filter(
+            (m) => m.date === date
+        );
+    
+        if (input.name === "hours") {
+            totalHoursperday = input.value;
+        }
+    
+        for (let i = 0; i < timeEntriesforthedate.length; i++) {
+            if (input.name === "workOrderId") {
+                if (
+                    timeEntriesforthedate[i].date === date &&
+                    timeEntriesforthedate[i].workOrder._id === input.value
+                ) {
+                    return (customError = "Duplicate work order ");
+                }
+            }
+    
+            if (input.name === "hours") {
+                totalHoursperday =
+                    parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
+                if (totalHoursperday > 24) {
+                    return (customError = "Total hours per day can't be more than 24 ");
+                }
+            }
+        }
+    
+        return customError > " " ? customError : null;
+    };
+    
     render() {
 
     return (
         <form onSubmit={this.handleSubmit}>
             <div className="row">
-                <div className="mr-2">
-                    <div className="col-1 m-1">
-                        {this.renderInput("week", "Week", "readOnly")}
-                    </div>
+            <div className="mr-2"></div>
+
+                <div className="col-1 m-1">
+                    {this.renderInput("week", "Week", "readOnly")}
                 </div>
+
                 <div className="col-2">
                     {this.renderInput("date", "Date", Date, "readOnly")}
                 </div>
+
                 <div className="col-2">
                     {this.renderSelect(
                         "workOrderId",
@@ -73,12 +113,19 @@ class TimeEntryForm extends Form {
                 <div className="col-3 ">
                     {this.handleSelect(this.state.data.workOrderId)}
                 </div>
+
                 <div className="col-1">
                     {this.renderInput("hours", "Hours", Number)}
                 </div>
-                <div className="col">{this.renderButton("Save")}</div>
-                <div className="col">
 
+                <div className="col">{this.renderButton("Save")}</div>
+                
+                <div className="col">
+                <button 
+                    onClick={() => this.props.onDelete(this.props.timeEntry)} 
+                    className="btn-warn btn-sm mt-3">
+                    Delete
+                </button>
                 </div>
             </div>
         </form>
