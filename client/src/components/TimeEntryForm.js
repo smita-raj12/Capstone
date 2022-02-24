@@ -27,7 +27,7 @@ class TimeEntryForm extends Form {
     
     doSubmit = async () => {
         console.log("doSubmit");
-        
+        this.props.onSave(this.state.data);
     };
 
     handleSelect(workOrderId) {
