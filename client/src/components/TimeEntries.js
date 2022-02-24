@@ -9,26 +9,21 @@ class TimeEntries extends Component {
     };
     
     handleSave =  (timeEntry) => {
-        console.log(timeEntry)
-        //const timeEntry1 = {...timeEntry, devCode: "DEV00001"}
-        console.log(timeEntry);
-       
+
             const timeEntries = this.state.timeEntries;
-           
+
             let newId = timeEntry.date + timeEntry.workOrderId
             timeEntries.push({
-              _id: newId,
-              date: timeEntry.date,
-              week: moment(timeEntry.date, "MM-DD-YYYY").week(),
-              workOrder: " ",
-              hours: 5,
+                _id: newId,
+                date: timeEntry.date,
+                week: moment(timeEntry.date, "MM-DD-YYYY").week(),
+                workOrder: " ",
+                hours: 5,
             });
     
             console.log("timeEntries ", timeEntries);
             this.setState({ timeEntries });
-           
-        
-      };
+    };
     
     render() {
         const {timeEntries} = this.state
