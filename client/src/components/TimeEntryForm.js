@@ -95,18 +95,18 @@ class TimeEntryForm extends Form {
             <div className="mr-2"></div>
 
                 <div className="col-1 m-1">
-                    {this.renderInput("week", "Week", "readOnly")}
+                    {this.renderInput("week", "Week")}
                 </div>
 
                 <div className="col-2">
-                    {this.renderInput("date", "Date", Date, "readOnly")}
+                    {this.renderInput("date", "Date", Date)}
                 </div>
 
                 <div className="col-2">
-                    {this.renderSelect(
+                    {this.renderInput(
                         "workOrderId",
                         "WorkOrder",
-                        this.state.workOrders
+                       
                     )}
                 </div>
 
