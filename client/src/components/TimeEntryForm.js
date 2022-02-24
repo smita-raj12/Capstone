@@ -6,7 +6,7 @@ import moment from "moment";
 
 class TimeEntryForm extends Form {
     state = {
-        data: { date: "", week: " ", workOrderId: "", hours: "" },
+        data: { date: "", week: " ", workOrderId: " ", hours: "" },
         workOrders: [],
         timeEntries: [],
         errors: {},
