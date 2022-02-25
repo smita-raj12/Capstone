@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import { getTimeEntryList } from './FakeTimeEntries';
+import { getTimeEntryList, saveTimeEntry, deleteTimeEntry } from './FakeTimeEntries';
 import { getWorkOrders} from './FakeWorkOrders';
 
 class TimeEntries extends Component {
@@ -20,7 +20,6 @@ class TimeEntries extends Component {
         const  workOrders  =  getWorkOrders();
         const  timeEntries  = getTimeEntryList();
 
-        // console.log("timeEntries",timeEntries)
         var dateArray = [];
         var weekArray = [];
         let prevWeekNumber = [];
@@ -59,30 +58,44 @@ class TimeEntries extends Component {
                 y = y +1;
             }
         }
-        //console.log(weekArray)
-        this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
+      
+        this.setState({ timeEntries, workOrders, dateArray, startDate });
     }
     
     
 
     handleSave =  (timeEntry) => {
+        
+        const timeEntry1 = {...timeEntry}
+        const { newTimeEntry } =  saveTimeEntry(timeEntry1);
 
-            const timeEntries = this.state.timeEntries;
+        const timeEntries = this.state.timeEntries;
 
-            let newId = timeEntry.date + timeEntry.workOrderId
-            timeEntries.push({
-                _id: newId,
-                date: timeEntry.date,
-                week: moment(timeEntry.date, "MM-DD-YYYY").week(),
-                workOrder: " ",
-                hours: 5,
-            });
+        let newId = timeEntry.date + timeEntry.workOrderId
+        timeEntries.push({
+            _id: newId,
+            date: timeEntry.date,
+            week: moment(timeEntry.date, "MM-DD-YYYY").week(),
+            workOrder: " ",
+            hours: 5,
+        });
     
             console.log("timeEntries ", timeEntries);
             this.setState({ timeEntries });
     };
     
-    
+    handleDelete = (timeEntry) => {
+        const origionaltimeEntries = this.state.timeEntries;
+       
+        const timeEntries = origionaltimeEntries.filter(
+            (m) => m._id !== timeEntry._id
+        );
+        console.log(origionaltimeEntries,timeEntry)
+        this.setState({ timeEntries });
+        deleteTimeEntry(timeEntry._id);
+        this.setState({ timeEntries });
+        
+    };
 
     render() {
 
@@ -90,20 +103,18 @@ class TimeEntries extends Component {
 
         return (
             <div>
-            <div> {timeEntries.map((item) => {
-                                return <div  key={item._id}>
-                                
-                                <TimeEntryForm
-                                    timeEntry={item}
-                                    timeEntries={timeEntries}
-                                    onSave={this.handleSave}
-                                />
-                            </div>
+                <div> {timeEntries.map((item) => {
+                        return <div  key={item._id}>
+                                    
+                        <TimeEntryForm
+                            timeEntry={item}
+                            timeEntries={timeEntries}
+                            onDelete={this.handleDelete}
+                            onSave={this.handleSave}
+                        />
+                        </div>
                     })}
-
                 </div>
-                
-                
             </div>
         )
     }

@@ -8,7 +8,7 @@ import { getWorkOrders } from "./FakeWorkOrders";
 
 class TimeEntryForm extends Form {
     state = {
-        data: { date: "", week: " ", workOrderId: " ", hours: "" },
+        data: { date: "",  workOrderId: " ", hours: "" },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -49,7 +49,6 @@ class TimeEntryForm extends Form {
     
     populateTimeEntries() {
         const { timeEntries } = this.props;
-        console.log("timeEntries ", timeEntries);
         this.setState({ timeEntries });
     }
     
@@ -78,7 +77,7 @@ class TimeEntryForm extends Form {
             date: TimeEntry.date,
             workOrderId: TimeEntry.workOrder._id,
             week: TimeEntry.week,
-            //workOrderDesc: TimeEntry.workOrder.desc,
+            workOrderDesc: TimeEntry.workOrder.desc,
             hours: TimeEntry.hours,
         };
     }
@@ -91,7 +90,7 @@ class TimeEntryForm extends Form {
 
         this.populateTimeEntries();
         const origionaltimeEntries = this.state.timeEntries;
-        // console.log("origionaltimeEntries", origionaltimeEntries);
+       
         const timeEntriesforthedate = origionaltimeEntries.filter(
             (m) => m.date === date
         );
@@ -121,6 +120,8 @@ class TimeEntryForm extends Form {
     
         return customError > " " ? customError : null;
     };
+    
+    
     
     render() {
 
