@@ -3,6 +3,8 @@ import Joi from "joi-browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "../common/Form";
 import moment from "moment";
+import { getWorkOrders } from "./FakeWorkOrders";
+
 
 class TimeEntryForm extends Form {
     state = {
@@ -21,9 +23,41 @@ class TimeEntryForm extends Form {
             .label("Date"),
         week: Joi.number(),
         workOrderId: Joi.string().label("WorkOrderId").required(),
-        // workOrderDesc: Joi.string().required().label("WorkOrderDesc"),
+        workOrderDesc: Joi.string().required().label("WorkOrderDesc"),
         hours: Joi.number().max(24).required(),
-      };
+    };
+
+    populateWorkOrder() {
+        const data  =  getWorkOrders();
+        let workOrders = [];
+        console.log(data);
+        data.map((o) =>
+            workOrders.push({
+                _id: o._id,
+                name: o.name,
+                desc: o.desc,
+            })
+        );
+        console.log(workOrders)
+        this.setState({ workOrders });
+    }
+    
+    populateTimeEntry() {
+        const { timeEntry } = this.props;
+        this.setState({ data: this.mapToViewModel(timeEntry) });
+    }
+    
+    populateTimeEntries() {
+        const { timeEntries } = this.props;
+        console.log("timeEntries ", timeEntries);
+        this.setState({ timeEntries });
+    }
+    
+    componentDidMount() {
+        this.populateWorkOrder();
+        this.populateTimeEntry();
+        this.populateTimeEntries();
+    }
     
     doSubmit = async () => {
         console.log("doSubmit");
@@ -44,7 +78,7 @@ class TimeEntryForm extends Form {
             date: TimeEntry.date,
             workOrderId: TimeEntry.workOrder._id,
             week: TimeEntry.week,
-            // workOrderDesc: TimeEntry.workOrder.desc,
+            //workOrderDesc: TimeEntry.workOrder.desc,
             hours: TimeEntry.hours,
         };
     }
@@ -54,7 +88,8 @@ class TimeEntryForm extends Form {
     
         var customError = " ";
         var totalHoursperday = 0;
-    
+
+        this.populateTimeEntries();
         const origionaltimeEntries = this.state.timeEntries;
         // console.log("origionaltimeEntries", origionaltimeEntries);
         const timeEntriesforthedate = origionaltimeEntries.filter(
@@ -103,10 +138,10 @@ class TimeEntryForm extends Form {
                 </div>
 
                 <div className="col-2">
-                    {this.renderInput(
+                    {this.renderSelect(
                         "workOrderId",
                         "WorkOrder",
-                       
+                        this.state.workOrders
                     )}
                 </div>
 
