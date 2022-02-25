@@ -58,7 +58,7 @@ class Form extends Component {
   renderButton(label) {
     return (
       <button
-        //disabled={this.validate()}
+        disabled={this.validate()}
         onClick={() => this.props.onSave(this.state.data)}
         className="btn btn-primary mt-3"
       >

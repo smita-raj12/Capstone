@@ -58,8 +58,7 @@ class TimeEntries extends Component {
                 y = y +1;
             }
         }
-      
-        this.setState({ timeEntries, workOrders, dateArray, startDate });
+        this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
     }
     
     
@@ -67,16 +66,16 @@ class TimeEntries extends Component {
     handleSave =  (timeEntry) => {
         
         const timeEntry1 = {...timeEntry}
-        const { newTimeEntry } =  saveTimeEntry(timeEntry1);
+        let newTimeEntry= saveTimeEntry(timeEntry1);
 
         const timeEntries = this.state.timeEntries;
 
-        let newId = timeEntry.date + timeEntry.workOrderId
+        
         timeEntries.push({
-            _id: newId,
+            _id: newTimeEntry._id,
             date: timeEntry.date,
             week: moment(timeEntry.date, "MM-DD-YYYY").week(),
-            workOrder: " ",
+            workOrder: timeEntry.workOrderId,
             hours: 5,
         });
     

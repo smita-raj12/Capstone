@@ -8,7 +8,7 @@ import { getWorkOrders } from "./FakeWorkOrders";
 
 class TimeEntryForm extends Form {
     state = {
-        data: { date: "",  workOrderId: " ", hours: "" },
+        data: { date: "",  workOrderId: " ", week: " ", hours: "" },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -77,7 +77,7 @@ class TimeEntryForm extends Form {
             date: TimeEntry.date,
             workOrderId: TimeEntry.workOrder._id,
             week: TimeEntry.week,
-            workOrderDesc: TimeEntry.workOrder.desc,
+            //workOrderDesc: TimeEntry.workOrder.desc,
             hours: TimeEntry.hours,
         };
     }
