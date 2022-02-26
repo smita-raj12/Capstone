@@ -4,7 +4,8 @@ import moment from 'moment';
 import {getTimeEntries}  from '../services/TimeEntriesService'
 
 import { saveTimeEntry, deleteTimeEntry } from './FakeTimeEntries';
-import { getWorkOrders} from './FakeWorkOrders';
+import { getWorkOrders} from '../services/WorkOrderService'
+
 //import Axios from './axios';
 
 class TimeEntries extends Component {
@@ -21,9 +22,9 @@ class TimeEntries extends Component {
     
     
     async componentDidMount() {
-        const  workOrders  =  getWorkOrders();
+        const  { data:workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntries();
-
+        
         const timeEntries = data.map(o=>({
             _id : o._id,
             week: moment(moment(o.date).format("MM/DD/YYYY")).week(),
@@ -73,7 +74,7 @@ class TimeEntries extends Component {
         // }
         //
         // this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
-        this.setState({timeEntries})
+        this.setState({timeEntries, workOrders})
     }
     
     

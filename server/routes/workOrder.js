@@ -1,16 +1,19 @@
 
-const { WorkOrder } = require("../models/workOrder");
+//const { WorkOrder } = require("../models/workOrder");
 
 const express = require("express");
 const router = express.Router();
+const db = require ("../startup/db");
 
-router.get("/", async (req, res) => {
-  const workOrders = await WorkOrder.find().select("-__v")
-
+router.get('/', (req, res)=> {
+  //console.log("test1",req);
+  const sqlGet = "SELECT * FROM workorders";
+  db.query(sqlGet, (err, result)=>{
+    console.log(result, err);
+    res.send(result);
+  })
   
-  res.send(workOrders);
 });
-
 
 
 module.exports = router;

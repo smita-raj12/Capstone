@@ -3,7 +3,7 @@ import Joi from "joi-browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "../common/Form";
 import moment from "moment";
-import { getWorkOrders } from "./FakeWorkOrders";
+import { getWorkOrders } from "../services/WorkOrderService";
 
 
 class TimeEntryForm extends Form {
@@ -15,20 +15,20 @@ class TimeEntryForm extends Form {
     };
     
     schema = {
-        _id: Joi.string(),
+        _id: Joi.number(),
         date: Joi.date()
             .max(moment().add(3, "months").format("MM/DD/YYYY"))
             .min(moment().subtract(3, "months").format("MM/DD/YYYY"))
             .required()
             .label("Date"),
         week: Joi.number(),
-        workOrderId: Joi.string().label("WorkOrderId").required(),
-        workOrderDesc: Joi.string().required().label("WorkOrderDesc"),
+        workOrderId: Joi.number().label("WorkOrderId").required(),
+        
         hours: Joi.number().max(24).required(),
     };
 
-    populateWorkOrder() {
-        const data  =  getWorkOrders();
+    async populateWorkOrder() {
+        const { data }  =  await getWorkOrders();
         let workOrders = [];
         console.log(data);
         data.map((o) =>
