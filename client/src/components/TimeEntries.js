@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import { getTimeEntryList, saveTimeEntry, deleteTimeEntry } from './FakeTimeEntries';
+import {getTimeEntries}  from '../services/TimeEntriesService'
+
+import { saveTimeEntry, deleteTimeEntry } from './FakeTimeEntries';
 import { getWorkOrders} from './FakeWorkOrders';
+//import Axios from './axios';
 
 class TimeEntries extends Component {
 
@@ -15,50 +18,62 @@ class TimeEntries extends Component {
         
     };
     
-
-    componentDidMount() {
+    
+    
+    async componentDidMount() {
         const  workOrders  =  getWorkOrders();
-        const  timeEntries  = getTimeEntryList();
+        const { data } = await getTimeEntries();
 
-        var dateArray = [];
-        var weekArray = [];
-        let prevWeekNumber = [];
-        let weekNumber = " ";
+        const timeEntries = data.map(o=>({
+            _id : o._id,
+            week: moment(moment(o.date).format("MM/DD/YYYY")).week(),
+            date: moment(o.date).format("MM/DD/YYYY"),
+            workOrderId: o.workOrderId,
+            hours: o.hours
+        }))
+        console.log(timeEntries);
+        
+        // var dateArray = [];
+        // var weekArray = [];
+        // let prevWeekNumber = [];
+        // let weekNumber = " ";
 
-        var currentDate = moment(
-            moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
-        );
+        // var currentDate = moment(
+        //     moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
+        // );
 
-        var startDate = moment(
-            moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
-        );
+        // var startDate = moment(
+        //     moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
+        // );
 
-        var stopDate = moment(
-            moment(moment(), "MM-DD-YYYY").add(10, "days").format("MM/DD/YYYY")
-        );
+        // var stopDate = moment(
+        //     moment(moment(), "MM-DD-YYYY").add(10, "days").format("MM/DD/YYYY")
+        // );
 
-        var x = 0;
-        let y = 0;
+        // var x = 0;
+        // let y = 0;
 
-        while (currentDate <= stopDate) {
-            dateArray.push({
-                _id: x,
-                name: moment(currentDate).format("MM/DD/YYYY"),
-            });
-            currentDate = moment(currentDate).add(1, "days");
-            x = x + 1;
-            weekNumber = moment(currentDate, "MM-DD-YYYY").week();
+        // while (currentDate <= stopDate) {
+        //     dateArray.push({
+        //         _id: x,
+        //         name: moment(currentDate).format("MM/DD/YYYY"),
+        //     });
+        //     currentDate = moment(currentDate).add(1, "days");
+        //     x = x + 1;
+        //     weekNumber = moment(currentDate, "MM-DD-YYYY").week();
 
-            if (weekNumber !== prevWeekNumber) {
-                weekArray.push({
-                    _id: y,
-                    name: weekNumber,
-                });
-                prevWeekNumber = weekNumber;
-                y = y +1;
-            }
-        }
-        this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
+        //     if (weekNumber !== prevWeekNumber) {
+        //         weekArray.push({
+        //             _id: y,
+        //             name: weekNumber,
+        //         });
+        //         prevWeekNumber = weekNumber;
+        //         y = y +1;
+        //     }
+        // }
+        //
+        // this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
+        this.setState({timeEntries})
     }
     
     

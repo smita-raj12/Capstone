@@ -72,10 +72,11 @@ class TimeEntryForm extends Form {
     }
 
     mapToViewModel(TimeEntry) {
+       
         return {
             _id: TimeEntry._id,
             date: TimeEntry.date,
-            workOrderId: TimeEntry.workOrder._id,
+            workOrderId: TimeEntry.workOrderId,
             week: TimeEntry.week,
             //workOrderDesc: TimeEntry.workOrder.desc,
             hours: TimeEntry.hours,
