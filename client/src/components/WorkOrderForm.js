@@ -1,32 +1,29 @@
-import React from 'react'
+import React from 'react';
+import Joi from 'joi-browser'
 import Form from '../common/Form';
-import "bootstrap/dist/css/bootstrap.min.css";
-//import { workOrders } from './FakeWorkOrders';
-import  Joi  from 'joi-browser';
 
 class WorkOrderForm extends Form {
     
     state = {
-        workOrder: [],
-        data: {name: " ", desc:" "}
-    };
+        data :{name:'' ,desc:''},
+        errors:{}
+    }
+    schema ={
+        name : Joi.string().required().label("name"),
+        desc : Joi.string().required().label("desc")
+    }
 
-    schema = {
-        _id: Joi.number(),
-        name: Joi.string().max(10).required(),
-        desc: Joi.string().max(80).required()
-    };
+    doSubmit=async ()=>{
+    
+    }
 
-    populateWorkOrder() {
-        const { workOrder } = this.props;
-        console.log(workOrder)
-        this.setState({ data: this.mapToViewModel(workOrder) });
+    customValidation = (input) => {
     }
 
     componentDidMount() {
-        console.log("test")
-        this.populateWorkOrder();
-        console.log(this.state.data);
+        const {workOrder} = this.props
+        
+        this.setState({ data: this.mapToViewModel(workOrder) });
     }
 
     mapToViewModel(workOrder) {
@@ -34,52 +31,33 @@ class WorkOrderForm extends Form {
         return {
             _id: workOrder._id,
             name: workOrder.name,
-            desc: workOrder.desc
+            desc: workOrder.desc,
+            
         };
     }
     
-   
-
-    doSubmit = async () => {
+    render() { 
         
-        //this.props.onSave(this.state.data);
-    };
-
-    customValidation = (input) => {
-        console.log(input)
-    }
-
-    render() {
-        console.log("test2")
-        const { workOrder } = this.props;
-        console.log(workOrder)
-        this.setState({ data: this.mapToViewModel(workOrder) });
+    
         return (
+        <div>
+            
             <form onSubmit={this.handleSubmit}>
             <div className="row">
             <div className="mr-2"></div>
-
-                <div className="col-1 m-1">
-                    {this.renderInput("name", "Name")}
-                </div>
-
-                <div className="col-2">
-                    {this.renderInput("desc", "Desc")}
-                </div>
-
-                <div className="col">{this.renderButton("Save")}</div>
-                
-                <div className="col">
-                <button 
-                    onClick={() => this.props.onDelete(this.props.workOrder)} 
-                    className="btn-warn btn-sm mt-3">
-                    Delete
-                </button>
-                </div>
+            <div className="col-3 m-1">
+            {this.renderInput("name","Name")}
             </div>
-        </form>
-        )
+            <div className="col-3 m-1">
+            {this.renderInput("desc","Desc",)}
+            </div>
+            <div className="col-3 m-1">
+            {this.renderButton("Save")} 
+            </div>
+            </div>
+            </form>
+        </div> );
     }
 }
-
+ 
 export default WorkOrderForm;

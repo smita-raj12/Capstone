@@ -126,7 +126,6 @@ class TimeEntryForm extends Form {
     };
     
     
-    
     render() {
 
     return (
