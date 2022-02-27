@@ -9,7 +9,7 @@ router.get('/', (req, res)=> {
   //console.log("test1",req);
   const sqlGet = "SELECT * FROM workorders";
   db.query(sqlGet, (err, result)=>{
-    console.log(result, err);
+    // console.log(result, err);
     res.send(result);
   })
   

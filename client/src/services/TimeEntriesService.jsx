@@ -3,6 +3,7 @@ import http from "./httpServices";
 const apiEndpoint = "/timeEntry";
 
 function timeEntryUrl(id) {
+  console.log(id)
   return `${apiEndpoint}/${id}`;
 }
 export function getTimeEntries() {
@@ -14,24 +15,29 @@ export function getTimeEntry(timeEntryId) {
   return http.get(timeEntryUrl(timeEntryId));
 }
 
-// export function saveTimeEntry(timeEntry) {
-//   if (!timeEntry._id.startsWith("new")) {
-//     const body = { ...timeEntry };
-//     delete body._id;
-//     delete body.week;
-//     delete body.workOrderDesc;
-//     return http.put(timeEntryUrl(timeEntry._id), body);
-//   } else {
-//     const body = { ...timeEntry };
+export function saveTimeEntry(timeEntry) {
+  console.log("timeEntry", timeEntry);
+  if (!timeEntry.formType.startsWith("new")) {
+    const body = { ...timeEntry };
+    delete body._id;
+    delete body.formType;
+    delete body.week;
+    delete body.workOrderDesc;
+    //delete body.hours;
+    return http.put(timeEntryUrl(timeEntry._id), body);
+  } else {
+    const body = { ...timeEntry };
 
-//     console.log("timeEntry", timeEntry);
-//     delete body._id;
-//     delete body.week;
-//     delete body.workOrderDesc;
-//     return http.post(apiEndpoint, body);
-//   }
-// }
+    delete body.formType;
+    delete body._id;
+    delete body.week;
+    delete body.workOrderDesc;
+    return http.post(apiEndpoint, body);
+  }
+  
+}
 
-// export function deleteTimeEntry(timeEntryId) {
-//   return http.delete(timeEntryUrl(timeEntryId));
-// }
+export function deleteTimeEntry(timeEntryId) {
+  console.log(timeEntryId)
+  return http.delete(timeEntryUrl(timeEntryId));
+}

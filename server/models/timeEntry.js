@@ -1,14 +1,15 @@
+
 const Joi = require("joi");
 
 
 function validateTimeEntry(timeEntry) {
-  const schema = {
+  console.log(timeEntry)
+  const schema = Joi.object({
     date: Joi.date().required(),
-    workOrderId: Joi.objectId().required(),
+    workOrderId: Joi.number().required(),
     hours: Joi.number().min(0).required(),
-    devCode: Joi.string().required().min(8).max(8)
-  };
 
+  });
   return Joi.validate(timeEntry, schema);
 }
 

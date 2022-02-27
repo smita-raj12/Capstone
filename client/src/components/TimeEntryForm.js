@@ -8,7 +8,7 @@ import { getWorkOrders } from "../services/WorkOrderService";
 
 class TimeEntryForm extends Form {
     state = {
-        data: { date: "",  workOrderId: " ", week: " ", hours: "" },
+        data: { date: "",  workOrderId: " ", week: " ", hours: "", formType:" " },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -17,20 +17,20 @@ class TimeEntryForm extends Form {
     schema = {
         _id: Joi.number(),
         date: Joi.date()
-            .max(moment().add(3, "months").format("MM/DD/YYYY"))
-            .min(moment().subtract(3, "months").format("MM/DD/YYYY"))
+            .max(moment().add(3, "months").format("YYYY-MM-DD"))
+            .min(moment().subtract(3, "months").format("YYYY-MM-DD"))
             .required()
             .label("Date"),
         week: Joi.number(),
         workOrderId: Joi.number().label("WorkOrderId").required(),
-        
         hours: Joi.number().max(24).required(),
+        formType: Joi.string().max(24).required()
     };
 
     async populateWorkOrder() {
         const { data }  =  await getWorkOrders();
         let workOrders = [];
-        console.log(data);
+        
         data.map((o) =>
             workOrders.push({
                 _id: o._id,
@@ -38,7 +38,7 @@ class TimeEntryForm extends Form {
                 desc: o.desc,
             })
         );
-        console.log(workOrders)
+       
         this.setState({ workOrders });
     }
     
@@ -59,7 +59,7 @@ class TimeEntryForm extends Form {
     }
     
     doSubmit = async () => {
-        console.log("doSubmit");
+        
         this.props.onSave(this.state.data);
     };
 
@@ -78,48 +78,49 @@ class TimeEntryForm extends Form {
             date: TimeEntry.date,
             workOrderId: TimeEntry.workOrderId,
             week: TimeEntry.week,
-            //workOrderDesc: TimeEntry.workOrder.desc,
             hours: TimeEntry.hours,
+            formType: TimeEntry.formType
         };
     }
     
     customValidation = (input) => {
-        const { date } = this.state.data;
+        console.log(input)
+        // const { date } = this.state.data;
     
-        var customError = " ";
-        var totalHoursperday = 0;
+        // var customError = " ";
+        // var totalHoursperday = 0;
 
-        this.populateTimeEntries();
-        const origionaltimeEntries = this.state.timeEntries;
+        // this.populateTimeEntries();
+        // const origionaltimeEntries = this.state.timeEntries;
        
-        const timeEntriesforthedate = origionaltimeEntries.filter(
-            (m) => m.date === date
-        );
+        // const timeEntriesforthedate = origionaltimeEntries.filter(
+        //     (m) => m.date === date
+        // );
     
-        if (input.name === "hours") {
-            totalHoursperday = input.value;
-        }
+        // if (input.name === "hours") {
+        //     totalHoursperday = input.value;
+        // }
     
-        for (let i = 0; i < timeEntriesforthedate.length; i++) {
-            if (input.name === "workOrderId") {
-                if (
-                    timeEntriesforthedate[i].date === date &&
-                    timeEntriesforthedate[i].workOrder._id === input.value
-                ) {
-                    return (customError = "Duplicate work order ");
-                }
-            }
+        // for (let i = 0; i < timeEntriesforthedate.length; i++) {
+        //     if (input.name === "workOrderId") {
+        //         if (
+        //             timeEntriesforthedate[i].date === date &&
+        //             timeEntriesforthedate[i].workOrder._id === input.value
+        //         ) {
+        //             return (customError = "Duplicate work order ");
+        //         }
+        //     }
     
-            if (input.name === "hours") {
-                totalHoursperday =
-                    parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
-                if (totalHoursperday > 24) {
-                    return (customError = "Total hours per day can't be more than 24 ");
-                }
-            }
-        }
+        //     if (input.name === "hours") {
+        //         totalHoursperday =
+        //             parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
+        //         if (totalHoursperday > 24) {
+        //             return (customError = "Total hours per day can't be more than 24 ");
+        //         }
+        //     }
+        // }
     
-        return customError > " " ? customError : null;
+        // return customError > " " ? customError : null;
     };
     
     

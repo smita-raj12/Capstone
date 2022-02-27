@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import {getTimeEntries}  from '../services/TimeEntriesService'
+import {getTimeEntries,  saveTimeEntry, deleteTimeEntry}  from '../services/TimeEntriesService'
+import { toast } from "react-toastify";
 
-import { saveTimeEntry, deleteTimeEntry } from './FakeTimeEntries';
 import { getWorkOrders} from '../services/WorkOrderService'
 
 //import Axios from './axios';
@@ -27,12 +27,13 @@ class TimeEntries extends Component {
         
         const timeEntries = data.map(o=>({
             _id : o._id,
-            week: moment(moment(o.date).format("MM/DD/YYYY")).week(),
-            date: moment(o.date).format("MM/DD/YYYY"),
+            week: moment(moment(o.date).format("YYYY-MM-DD")).week(),
+            date: moment(o.date).format("YYYY-MM-DD"),
             workOrderId: o.workOrderId,
-            hours: o.hours
+            hours: o.hours,
+            formType: "data"
         }))
-        console.log(timeEntries);
+       
         
         // var dateArray = [];
         // var weekArray = [];
@@ -40,15 +41,15 @@ class TimeEntries extends Component {
         // let weekNumber = " ";
 
         // var currentDate = moment(
-        //     moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
+        //     moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
         // );
 
         // var startDate = moment(
-        //     moment(moment(), "MM-DD-YYYY").subtract(10, "days").format("MM/DD/YYYY")
+        //     moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
         // );
 
         // var stopDate = moment(
-        //     moment(moment(), "MM-DD-YYYY").add(10, "days").format("MM/DD/YYYY")
+        //     moment(moment(), "YYYY-MM-DD").add(10, "days").format("YYYY-MM-DD")
         // );
 
         // var x = 0;
@@ -57,11 +58,11 @@ class TimeEntries extends Component {
         // while (currentDate <= stopDate) {
         //     dateArray.push({
         //         _id: x,
-        //         name: moment(currentDate).format("MM/DD/YYYY"),
+        //         name: moment(currentDate).format("YYYY-MM-DD"),
         //     });
         //     currentDate = moment(currentDate).add(1, "days");
         //     x = x + 1;
-        //     weekNumber = moment(currentDate, "MM-DD-YYYY").week();
+        //     weekNumber = moment(currentDate, "YYYY-MM-DD").week();
 
         //     if (weekNumber !== prevWeekNumber) {
         //         weekArray.push({
@@ -79,37 +80,47 @@ class TimeEntries extends Component {
     
     
 
-    handleSave =  (timeEntry) => {
+    handleSave =  async (timeEntry) => {
         
-        const timeEntry1 = {...timeEntry}
-        let newTimeEntry= saveTimeEntry(timeEntry1);
-
-        const timeEntries = this.state.timeEntries;
-
-        
-        timeEntries.push({
-            _id: newTimeEntry._id,
-            date: timeEntry.date,
-            week: moment(timeEntry.date, "MM-DD-YYYY").week(),
-            workOrder: timeEntry.workOrderId,
-            hours: 5,
-        });
-    
-            console.log("timeEntries ", timeEntries);
-            this.setState({ timeEntries });
+        try {
+            const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
+      
+            if (timeEntry._id.startsWith("new")) {
+                const timeEntries = this.state.timeEntries;
+             
+      
+              timeEntries.push({
+                _id: newTimeEntry._id,
+                date: timeEntry.date,
+                week: moment(timeEntry.date, "MM-DD-YYYY").week(),
+                workOrder: " ",
+                hours: " ",
+              });
+      
+              
+              this.setState({ timeEntries });
+            }
+          } catch (ex) {
+            if (ex.response) console.log("ex.repsonse", ex.response);
+          }
     };
     
-    handleDelete = (timeEntry) => {
+    handleDelete = async (timeEntry) => {
         const origionaltimeEntries = this.state.timeEntries;
-       
         const timeEntries = origionaltimeEntries.filter(
             (m) => m._id !== timeEntry._id
         );
-        console.log(origionaltimeEntries,timeEntry)
         this.setState({ timeEntries });
-        deleteTimeEntry(timeEntry._id);
-        this.setState({ timeEntries });
-        
+    
+        try {
+            
+            await deleteTimeEntry(timeEntry._id);
+        } catch (ex) {
+            console.log("HANDLE DELETE CATCH BLOCK");
+            if (ex.response && ex.response.status === 404)
+                toast.error("This post has already been deleted");
+            this.setState({ timeEntries: origionaltimeEntries });
+        }
     };
 
     render() {
@@ -119,11 +130,12 @@ class TimeEntries extends Component {
         return (
             <div>
                 <div> {timeEntries.map((item) => {
-                        return <div  key={item._id}>
-                                    
+                        return <div  key={item._id}
+                        className="list-inline-item list-group-item-info">            
                         <TimeEntryForm
                             timeEntry={item}
-                            timeEntries={timeEntries}
+
+                            // timeEntries={timeEntries}
                             onDelete={this.handleDelete}
                             onSave={this.handleSave}
                         />
