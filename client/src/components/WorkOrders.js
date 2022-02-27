@@ -1,8 +1,10 @@
 import React from 'react'
+import WorkOrderForm from './WorkOrderForm'
+
 
 function WorkOrders() {
   return (
-    <div>WorkOrders</div>
+    <div><WorkOrderForm/></div>
   )
 }
 
