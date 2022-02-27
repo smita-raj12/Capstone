@@ -84,7 +84,7 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", readOnly = false) {
     const { data, errors } = this.state;
-
+    console.log(data);
     return (
       <Input
         name={name}

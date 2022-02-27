@@ -53,6 +53,8 @@ class TimeEntryForm extends Form {
     }
     
     componentDidMount() {
+
+        console.log("test")
         this.populateWorkOrder();
         this.populateTimeEntry();
         this.populateTimeEntries();
