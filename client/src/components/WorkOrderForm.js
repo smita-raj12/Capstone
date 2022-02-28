@@ -38,7 +38,7 @@ class WorkOrderForm extends Form {
     
     render() { 
         
-    
+        console.log("data",this.state.data)
         return (
         <div>
             

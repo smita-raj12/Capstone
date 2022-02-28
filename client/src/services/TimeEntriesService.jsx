@@ -6,9 +6,19 @@ function timeEntryUrl(id) {
   console.log(id)
   return `${apiEndpoint}/${id}`;
 }
+
+function timeEntryUrlMaxId() {
+  return `${apiEndpoint}/max`;
+}
+
 export function getTimeEntries() {
     console.log("test",apiEndpoint)
     return http.get(apiEndpoint);
+}
+
+export function getTimeEntryMaxId() {
+  console.log("test",apiEndpoint)
+  return http.get(timeEntryUrlMaxId());
 }
 
 export function getTimeEntry(timeEntryId) {
@@ -17,7 +27,7 @@ export function getTimeEntry(timeEntryId) {
 
 export function saveTimeEntry(timeEntry) {
   console.log("timeEntry", timeEntry);
-  if (!timeEntry.formType.startsWith("new")) {
+  if (!timeEntry.formType.startsWith("New")) {
     const body = { ...timeEntry };
     delete body._id;
     delete body.formType;

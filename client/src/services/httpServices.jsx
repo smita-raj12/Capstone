@@ -26,6 +26,7 @@ axios.interceptors.response.use(null,error=>{
       post :axios.post,
       put :axios.put,
       delete :axios.delete,
+    
       //setJwt
   }
   export default axiosHtttp;

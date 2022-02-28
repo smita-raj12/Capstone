@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import {getTimeEntries,  saveTimeEntry, deleteTimeEntry}  from '../services/TimeEntriesService'
+import {getTimeEntries,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
 import { toast } from "react-toastify";
-
 import { getWorkOrders} from '../services/WorkOrderService'
 
-//import Axios from './axios';
 
 class TimeEntries extends Component {
 
@@ -15,15 +13,18 @@ class TimeEntries extends Component {
         workOrders: [],
         dateArray: [],
         weekArray: [],
-        startDate: "2021-01-01"
-        
+        startDate: "2021-01-01",
+        maxId: 0
     };
     
     
     
     async componentDidMount() {
-        const  { data:workOrders }  =  await getWorkOrders();
+        const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntries();
+        const { data:maxData } = await getTimeEntryMaxId();
+        
+        const maxId = maxData[0]["MAX(_id)"] +1;
         
         const timeEntries = data.map(o=>({
             _id : o._id,
@@ -35,47 +36,34 @@ class TimeEntries extends Component {
         }))
        
         
-        // var dateArray = [];
-        // var weekArray = [];
-        // let prevWeekNumber = [];
-        // let weekNumber = " ";
+        var dateArray = [];
+       
+        var currentDate = moment(
+            moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
+        );
 
-        // var currentDate = moment(
-        //     moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
-        // );
+        var startDate = moment(
+            moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
+        );
 
-        // var startDate = moment(
-        //     moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
-        // );
+        var stopDate = moment(
+            moment(moment(), "YYYY-MM-DD").add(10, "days").format("YYYY-MM-DD")
+        );
 
-        // var stopDate = moment(
-        //     moment(moment(), "YYYY-MM-DD").add(10, "days").format("YYYY-MM-DD")
-        // );
+        var x = 0
 
-        // var x = 0;
-        // let y = 0;
+        while (currentDate <= stopDate) {
 
-        // while (currentDate <= stopDate) {
-        //     dateArray.push({
-        //         _id: x,
-        //         name: moment(currentDate).format("YYYY-MM-DD"),
-        //     });
-        //     currentDate = moment(currentDate).add(1, "days");
-        //     x = x + 1;
-        //     weekNumber = moment(currentDate, "YYYY-MM-DD").week();
-
-        //     if (weekNumber !== prevWeekNumber) {
-        //         weekArray.push({
-        //             _id: y,
-        //             name: weekNumber,
-        //         });
-        //         prevWeekNumber = weekNumber;
-        //         y = y +1;
-        //     }
-        // }
-        //
-        // this.setState({ timeEntries, workOrders, dateArray, weekArray, startDate });
-        this.setState({timeEntries, workOrders})
+            dateArray.push({
+                _id: x,
+                name: moment(currentDate).format("YYYY-MM-DD"),
+            });
+            currentDate = moment(currentDate).add(1, "days");
+            x = x + 1;
+            
+        }
+        
+        this.setState({timeEntries, workOrders,dateArray, maxId, startDate})
     }
     
     
@@ -123,13 +111,34 @@ class TimeEntries extends Component {
         }
     };
 
+    getPageData(){
+        const { timeEntries: allTimeEntries, dateArray, startDate, maxId} = this.state
+        const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
+            moment(m.date).isSameOrAfter(startDate)
+    );
+        
+        dateArray.map((o, id) =>
+            timeentriesWithinDateRange.push({
+            date: o.name,
+            _id: maxId + id,
+            week: moment(o.name, "YYYY-MM-DD").week(),
+            workOrder: 0,
+            hours: 0,
+            formType:"New"
+        })
+        
+    );
+    
+    return {data: timeentriesWithinDateRange}
+}
+    
+    
     render() {
-
-        const {timeEntries} = this.state
-
+       
+         const { data}  = this.getPageData();
         return (
             <div>
-                <div> {timeEntries.map((item) => {
+                <div> {data.map((item) => {
                         return <div  key={item._id}
                         className="list-inline-item list-group-item-info">            
                         <TimeEntryForm

@@ -8,7 +8,8 @@ import { getWorkOrders } from "../services/WorkOrderService";
 
 class TimeEntryForm extends Form {
     state = {
-        data: { date: "",  workOrderId: " ", week: " ", hours: "", formType:" " },
+        data: { date: moment(moment(), "YYYY-MM-DD").subtract(3, "months").format("YYYY-MM-DD"),
+          workOrderId: 0, week: 0, hours: 0, formType:" " },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -22,8 +23,8 @@ class TimeEntryForm extends Form {
             .required()
             .label("Date"),
         week: Joi.number(),
-        workOrderId: Joi.number().label("WorkOrderId").required(),
-        hours: Joi.number().max(24).required(),
+        workOrderId: Joi.number().label("WorkOrderId"),
+        hours: Joi.number().min(1).max(24),
         formType: Joi.string().max(24).required()
     };
 
@@ -54,7 +55,6 @@ class TimeEntryForm extends Form {
     
     componentDidMount() {
 
-        console.log("test")
         this.populateWorkOrder();
         this.populateTimeEntry();
         this.populateTimeEntries();
@@ -86,7 +86,7 @@ class TimeEntryForm extends Form {
     }
     
     customValidation = (input) => {
-        console.log(input)
+        
         // const { date } = this.state.data;
     
         // var customError = " ";
@@ -149,7 +149,7 @@ class TimeEntryForm extends Form {
                     )}
                 </div>
 
-                <div className="col-3 ">
+                <div className="col-3">
                     {this.handleSelect(this.state.data.workOrderId)}
                 </div>
 
@@ -157,9 +157,9 @@ class TimeEntryForm extends Form {
                     {this.renderInput("hours", "Hours", Number)}
                 </div>
 
-                <div className="col">{this.renderButton("Save")}</div>
+                <div className="col-1">{this.renderButton("Save")}</div>
                 
-                <div className="col">
+                <div className="col-1">
                 <button 
                     onClick={() => this.props.onDelete(this.props.timeEntry)} 
                     className="btn-warn btn-sm mt-3">

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import WorkOrderForm from './WorkOrderForm'
-import { getWorkOrders } from '../services/WorkOrderService';
+import { getWorkOrders, saveWorkOrder } from '../services/WorkOrderService';
 
 
 class WorkOrders extends Component {
@@ -15,7 +15,25 @@ class WorkOrders extends Component {
   }
 
   handleSave =  async (workOrder) => {
-    console.log(workOrder);
+    try {
+      const { data: newWorkOrder } = await saveWorkOrder(workOrder);
+
+      if (workOrder._id.startsWith("new")) {
+          const workOrders = this.state.workOrders;
+       
+
+        workOrders.push({
+          _id: newWorkOrder._id,
+          name: workOrder.name,
+          desc: workOrder.desc,
+        });
+
+        
+        this.setState({ workOrders });
+      }
+    } catch (ex) {
+      if (ex.response) console.log("ex.repsonse", ex.response);
+    }
   }
 
   handleDelete = async (workOrder) => {
@@ -24,7 +42,7 @@ class WorkOrders extends Component {
 
   render(){
     const {workOrders} = this.state
-    console.log(workOrders)
+    
   return (
     
     <div> {workOrders.map((item) => {
