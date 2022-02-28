@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import WorkOrderForm from './WorkOrderForm'
-import { getWorkOrders } from './FakeWorkOrders';
+import { getWorkOrders } from '../services/WorkOrderService';
 
 
 class WorkOrders extends Component {
@@ -8,8 +8,8 @@ class WorkOrders extends Component {
     workOrders: []
   };
 
-  componentDidMount() {
-    const   workOrders   =  getWorkOrders(); 
+  async componentDidMount() {
+    const   { data: workOrders }   =  await getWorkOrders(); 
     console.log(workOrders)
     this.setState({workOrders})
   }

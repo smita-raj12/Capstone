@@ -2,7 +2,7 @@ import React from 'react';
 import Joi from 'joi-browser'
 import Form from '../common/Form';
 import auth from '../services/authService';
-import { Redirect } from 'react-router-dom';
+//import { Redirect } from 'react-router-dom';
 
 class LoginForm extends Form {
     

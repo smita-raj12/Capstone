@@ -8,23 +8,23 @@ const router = express.Router();
 const {GetUser} = require("./Sqlqueries/AuthSql")
 const db = require ("../startup/db");
 
-router.post('/', async (req, res) => {
-  const { error } = validate(req.body); 
-  if (error) return res.status(400).send(error.details[0].message);
+// router.post('/', async (req, res) => {
+//   const { error } = validate(req.body); 
+//   if (error) return res.status(400).send(error.details[0].message);
   
-  const {email, password} = req.body;
-  var getUser = " "
-    if(email) 
-    const user = await GetUser(email)
+//   const {email, password} = req.body;
+//   var getUser = " "
+//     if(email) 
+//     //let user = GetUser(email)
    
-    console.log("compare" ,password, user);
-  const validPassword = await bcrypt.compare(password, user.password);
+//     console.log("compare" ,password, user);
+//   const validPassword = await bcrypt.compare(password, user.password);
   
-  if (!validPassword) return res.status(400).send('Invalid email or password.');
+//   if (!validPassword) return res.status(400).send('Invalid email or password.');
 
-  const token = generateAuthToken(user);
-  res.send(token);
-});
+//   const token = generateAuthToken(user);
+//   res.send(token);
+// });
 
 function validate(req) {
   const schema = {
