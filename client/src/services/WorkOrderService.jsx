@@ -5,10 +5,15 @@ export function getWorkOrders() {
 }
 
 export function saveWorkOrder(workOrder,id){
-    if (!timeEntry.formType.startsWith("New")) {
+    console.log(workOrder)
+    if (!workOrder.id === 0) {
         const body = { ...workOrder };
         delete body._id;
         return http.put(`/workOrder/${id}`, body);
+    }else {
+        const body = { ...workOrder };
+        delete body._id;
+        return http.post("/workOrder", body);
     }
 }
 

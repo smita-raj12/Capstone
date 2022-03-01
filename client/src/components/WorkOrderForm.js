@@ -5,13 +5,14 @@ import Form from '../common/Form';
 class WorkOrderForm extends Form {
     
     state = {
-        data : {id: 0, name:'' ,desc:''},
+        data : {_id: 0, name:'' ,desc:''},
         errors:{}
     }
     schema ={
         _id  : Joi.number(),
         name : Joi.string().required(),
-        desc : Joi.string().required()
+        desc : Joi.string().required(),
+        
     }
 
     doSubmit = async ()=>{
@@ -24,6 +25,7 @@ class WorkOrderForm extends Form {
 
     componentDidMount() {
         const {workOrder} = this.props
+        console.log(workOrder)
         this.setState({ data: this.mapToViewModel(workOrder) });
     }
 
@@ -44,6 +46,9 @@ class WorkOrderForm extends Form {
                 <form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <div className="mr-2"></div>
+                        <div className="col-1 m-1">
+                            {this.renderInput("_id","ID", "readOnly")}
+                        </div>
                         <div className="col-3 m-1">
                             {this.renderInput("name","Name")}
                         </div>

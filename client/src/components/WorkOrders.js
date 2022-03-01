@@ -5,19 +5,26 @@ import { toast } from "react-toastify";
 
 class WorkOrders extends Component {
   state = {
-    workOrders: []
+    workOrders: [],
+    newWorkOrders : []
   };
 
   async componentDidMount() {
     const   { data: workOrders }   =  await getWorkOrders(); 
-    console.log(workOrders)
+    
+    workOrders.push({
+      _id: 0,
+      name: " ",
+      desc: " "
+    })
+    console.log(workOrders);
     this.setState({workOrders})
   }
 
   handleSave =  async (workOrder) => {
     try {
       const { data: newWorkOrder } = await saveWorkOrder(workOrder);
-
+      if (workOrder._id === 0) {
       const workOrders = this.state.workOrders;
       workOrders.push({
           _id: newWorkOrder._id,
@@ -25,7 +32,7 @@ class WorkOrders extends Component {
           desc: workOrder.desc,
       });
       this.setState({ workOrders });
-      
+    }  
     } catch (ex) {
       if (ex.response) console.log("ex.repsonse", ex.response);
     }
@@ -48,7 +55,16 @@ class WorkOrders extends Component {
             this.setState({ workOrders: origionalworkOrders });
         }
   }
+  // getPageData(){
+  //   const { workOrders: allWorkOrders, newWorkOrders } = this.state
+  //   const workOrdersWithNew = allWorkOrders.filter((m) =>
+  //           m._id < _id);
+  //           newWorkOrders.map((o) =>{
+  //             workOrdersWithNew.push({
 
+  //             })
+  //           })
+  // } 
   render(){
     const {workOrders} = this.state
     
