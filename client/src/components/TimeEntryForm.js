@@ -9,7 +9,7 @@ import { getWorkOrders } from "../services/WorkOrderService";
 class TimeEntryForm extends Form {
     state = {
         data: { date: moment(moment(), "YYYY-MM-DD").subtract(3, "months").format("YYYY-MM-DD"),
-          workOrderId: 0, week: 0, hours: 0, formType:" " },
+        workOrderId: 0, week: 0, hours: 0, formType:" " },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -61,7 +61,6 @@ class TimeEntryForm extends Form {
     }
     
     doSubmit = async () => {
-        
         this.props.onSave(this.state.data);
     };
 
@@ -74,7 +73,6 @@ class TimeEntryForm extends Form {
     }
 
     mapToViewModel(TimeEntry) {
-       
         return {
             _id: TimeEntry._id,
             date: TimeEntry.date,

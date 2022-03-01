@@ -52,20 +52,20 @@ class WorkOrders extends Component {
   render(){
     const {workOrders} = this.state
     
-  return (
-    
-    <div> {workOrders.map((item) => {
-                        return <div  key={item._id}
-                        className="list-inline-item list-group-item-info">      
-        <WorkOrderForm 
-          workOrder={item}
-          onDelete={this.handleDelete}
-          onSave={this.handleSave}
-        /> 
-    </div>
-  })}
-  </div> 
-  )
-}
+    return (
+      
+      <div> {workOrders.map((item) => {
+                          return <div  key={item._id}
+                          className="list-inline-item list-group-item-info">      
+          <WorkOrderForm 
+            workOrder={item}
+            onDelete={this.handleDelete}
+            onSave={this.handleSave}
+          /> 
+      </div>
+    })}
+    </div> 
+    )
+  }
 }
 export default WorkOrders

@@ -5,12 +5,13 @@ import Form from '../common/Form';
 class WorkOrderForm extends Form {
     
     state = {
-        data :{name:'' ,desc:''},
+        data : {id: 0, name:'' ,desc:''},
         errors:{}
     }
     schema ={
-        name : Joi.string().required().label("name"),
-        desc : Joi.string().required().label("desc")
+        _id  : Joi.number(),
+        name : Joi.string().required(),
+        desc : Joi.string().required()
     }
 
     doSubmit = async ()=>{
