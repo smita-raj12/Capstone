@@ -1,6 +1,6 @@
 
 //const { WorkOrder } = require("../models/workOrder");
-
+const  {validate}  = require("../models/workOrder");
 const express = require("express");
 const router = express.Router();
 const db = require ("../startup/db");
@@ -16,13 +16,24 @@ router.get('/', (req, res)=> {
 router.post("/", (req, res)=>{
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+  //const id = req.body._id
   const name = req.body.name
-  const desc = req.body.desc
+  const description = req.body.description
 
-  const sqlInsert = "INSERT INTO workorders (name, desc) VALUES (?,?);"
+  const workOrderInsert = "INSERT INTO workorders (name, description) VALUES (?,?);"
   
-  db.query(sqlInsert, [name, desc], (err, result)=>{
+  
+  db.query(workOrderInsert, [name, description], (err, result)=>{
   console.log(err);
+  if(err) console.log(err);
+  if (!result){
+      return res
+      .status(404)
+      .send("The timeEntry with the given ID was not found.");
+  }
+  console.log("result",result)
+  res.send(result);
+
   }); 
 });
 
@@ -31,11 +42,11 @@ router.put("/:id", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
  
-  const { name, desc } = req.body
+  const { name, description } = req.body
 
-  const sqlUpdate = "UPDATE workorders SET name = ?, desc= ? WHERE _id = ?";
+  const sqlUpdate = "UPDATE workorders SET name = ?, description= ? WHERE _id = ?";
 
-  db.query(sqlUpdate, [name, desc, req.params.id], (err, result)=>{
+  db.query(sqlUpdate, [name, description, req.params.id], (err, result)=>{
       if(err) console.log(err);
       if (!result){
     return res

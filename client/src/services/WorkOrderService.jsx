@@ -4,12 +4,12 @@ export function getWorkOrders() {
     return http.get("/workOrder");
 }
 
-export function saveWorkOrder(workOrder,id){
+export function saveWorkOrder(workOrder){
     console.log(workOrder)
-    if (!workOrder.id === 0) {
+    if (!workOrder._id === 0) {
         const body = { ...workOrder };
         delete body._id;
-        return http.put(`/workOrder/${id}`, body);
+        return http.put(`/workOrder/${workOrder._id}`, body);
     }else {
         const body = { ...workOrder };
         delete body._id;

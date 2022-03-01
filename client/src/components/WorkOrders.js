@@ -15,7 +15,7 @@ class WorkOrders extends Component {
     workOrders.push({
       _id: 0,
       name: " ",
-      desc: " "
+      description: " "
     })
     console.log(workOrders);
     this.setState({workOrders})
@@ -24,12 +24,20 @@ class WorkOrders extends Component {
   handleSave =  async (workOrder) => {
     try {
       const { data: newWorkOrder } = await saveWorkOrder(workOrder);
+      console.log("newWorkOrder",newWorkOrder.insertId)
       if (workOrder._id === 0) {
       const workOrders = this.state.workOrders;
+      for (let i=0;i < workOrders.length;i++)
+          {if (workOrders[i]._id === 0) 
+           
+            { workOrders[i]=workOrder
+              workOrders[i]._id=newWorkOrder.insertId}
+            
+          }
       workOrders.push({
-          _id: newWorkOrder._id,
-          name: workOrder.name,
-          desc: workOrder.desc,
+          _id: newWorkOrder.insertId + 1 ,
+          name: " ",
+          description: " ",
       });
       this.setState({ workOrders });
     }  

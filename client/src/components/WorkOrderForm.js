@@ -5,13 +5,13 @@ import Form from '../common/Form';
 class WorkOrderForm extends Form {
     
     state = {
-        data : {_id: 0, name:'' ,desc:''},
+        data : {_id: 0, name:'' ,description:''},
         errors:{}
     }
     schema ={
         _id  : Joi.number(),
         name : Joi.string().required(),
-        desc : Joi.string().required(),
+        description : Joi.string().required(),
         
     }
 
@@ -34,7 +34,7 @@ class WorkOrderForm extends Form {
         return {
             _id: workOrder._id,
             name: workOrder.name,
-            desc: workOrder.desc,
+            description: workOrder.description,
             
         };
     }
@@ -46,16 +46,16 @@ class WorkOrderForm extends Form {
                 <form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <div className="mr-2"></div>
-                        <div className="col-1 m-1">
-                            {this.renderInput("_id","ID", "readOnly")}
+                        <div className="col-2 m-1">
+                            {this.renderInput("_id","ID", Number ,"readOnly")}
                         </div>
-                        <div className="col-3 m-1">
+                        <div className="col-2 m-1">
                             {this.renderInput("name","Name")}
                         </div>
                         <div className="col-3 m-1">
-                            {this.renderInput("desc","Desc",)}
+                            {this.renderInput("description","description",)}
                         </div>
-                        <div className="col-3 m-1">
+                        <div className="col-2 m-1">
                             {this.renderButton("Save")} 
                         </div>
                         <div className="col-1">

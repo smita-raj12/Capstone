@@ -36,7 +36,7 @@ class TimeEntryForm extends Form {
             workOrders.push({
                 _id: o._id,
                 name: o.name,
-                desc: o.desc,
+                description: o.description,
             })
         );
        
@@ -68,8 +68,8 @@ class TimeEntryForm extends Form {
         var selectedWorkOrder = this.state.workOrders.filter(
             (m) => m._id !== workOrderId
         );
-        const selectedDesc = selectedWorkOrder.map((o) => o.desc);
-        return !workOrderId ? " " : selectedDesc;
+        const selecteddescription = selectedWorkOrder.map((o) => o.description);
+        return !workOrderId ? " " : selecteddescription;
     }
 
     mapToViewModel(TimeEntry) {

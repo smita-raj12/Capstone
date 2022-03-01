@@ -40,8 +40,7 @@ class Form extends Component {
   validate = () => {
     const options = { abortEarly: false };
     const { error } = Joi.validate(this.state.data, this.schema, options);
-    //console.log(this.state.data)
-    // console.log(error);
+    
     if (!error) return null;
     
     const errors = {};
@@ -86,7 +85,7 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", readOnly = false) {
     const { data, errors } = this.state;
-    console.log("form read only",readOnly)
+   
     return (
       <Input
         name={name}
