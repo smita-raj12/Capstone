@@ -48,14 +48,17 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const workOrder = ("DELETE FROM workorders WHERE name = ?");
- 
-  if (!workOrder)
+  //const id = req.body._id
+  const workOrderDelete = "DELETE FROM workorders WHERE _id = ?";
+  db.query(workOrderDelete, [req.params.id], (err, result)=>{
+    if(err) console.log(err);
+    
+  if (!result)
     return res
       .status(404)
-      .send("The workOrder with the given ID was not found.");
-
-  res.send(workOrder);
+      .send("The timeEntry with the given ID was not found.");
+  
+  res.send(result);
+})
 });
-
 module.exports = router;
