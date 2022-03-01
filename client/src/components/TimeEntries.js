@@ -115,27 +115,24 @@ class TimeEntries extends Component {
         const { timeEntries: allTimeEntries, dateArray, startDate, maxId} = this.state
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
-    );
+        );
         
         dateArray.map((o, id) =>
             timeentriesWithinDateRange.push({
-            date: o.name,
-            _id: maxId + id,
-            week: moment(o.name, "YYYY-MM-DD").week(),
-            workOrder: 0,
-            hours: 0,
-            formType:"New"
-        })
-        
-    );
-    
-    return {data: timeentriesWithinDateRange}
-}
+                date: o.name,
+                _id: maxId + id,
+                week: moment(o.name, "YYYY-MM-DD").week(),
+                workOrder: 0,
+                hours: 0,
+                formType:"New"
+            })
+        );
+        return {data: timeentriesWithinDateRange}
+    }
     
     
     render() {
-       
-         const { data}  = this.getPageData();
+        const { data}  = this.getPageData();
         return (
             <div>
                 <div> {data.map((item) => {
@@ -143,8 +140,6 @@ class TimeEntries extends Component {
                         className="list-inline-item list-group-item-info">            
                         <TimeEntryForm
                             timeEntry={item}
-
-                            // timeEntries={timeEntries}
                             onDelete={this.handleDelete}
                             onSave={this.handleSave}
                         />

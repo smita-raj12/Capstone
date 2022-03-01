@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import WorkOrderForm from './WorkOrderForm'
-import { getWorkOrders, saveWorkOrder } from '../services/WorkOrderService';
-
+import { getWorkOrders, saveWorkOrder , deleteWorkOrder} from '../services/WorkOrderService';
+import { toast } from "react-toastify";
 
 class WorkOrders extends Component {
   state = {
@@ -18,26 +18,35 @@ class WorkOrders extends Component {
     try {
       const { data: newWorkOrder } = await saveWorkOrder(workOrder);
 
-      if (workOrder._id.startsWith("new")) {
-          const workOrders = this.state.workOrders;
-       
-
-        workOrders.push({
+      const workOrders = this.state.workOrders;
+      workOrders.push({
           _id: newWorkOrder._id,
           name: workOrder.name,
           desc: workOrder.desc,
-        });
-
-        
-        this.setState({ workOrders });
-      }
+      });
+      this.setState({ workOrders });
+      
     } catch (ex) {
       if (ex.response) console.log("ex.repsonse", ex.response);
     }
   }
 
   handleDelete = async (workOrder) => {
-    console.log(workOrder);
+    const origionalworkOrders = this.state.workOrders;
+        const workOrders = origionalworkOrders.filter(
+            (m) => m._id !== workOrder._id
+        );
+        this.setState({ workOrders });
+    
+        try {
+            
+            await deleteWorkOrder(workOrder._id);
+        } catch (ex) {
+            console.log("HANDLE DELETE CATCH BLOCK");
+            if (ex.response && ex.response.status === 404)
+                toast.error("This post has already been deleted");
+            this.setState({ workOrders: origionalworkOrders });
+        }
   }
 
   render(){

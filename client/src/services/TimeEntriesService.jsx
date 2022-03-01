@@ -47,7 +47,7 @@ export function saveTimeEntry(timeEntry) {
   
 }
 
-export function deleteTimeEntry(timeEntryId) {
-  console.log(timeEntryId)
-  return http.delete(timeEntryUrl(timeEntryId));
+export function deleteTimeEntry(id) {
+  console.log(id)
+  return http.delete(timeEntryUrl(id));
 }

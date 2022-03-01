@@ -13,16 +13,16 @@ class WorkOrderForm extends Form {
         desc : Joi.string().required().label("desc")
     }
 
-    doSubmit=async ()=>{
-    
+    doSubmit = async ()=>{
+        this.props.onSave(this.state.data);
     }
 
     customValidation = (input) => {
+        
     }
 
     componentDidMount() {
         const {workOrder} = this.props
-        
         this.setState({ data: this.mapToViewModel(workOrder) });
     }
 
@@ -38,25 +38,31 @@ class WorkOrderForm extends Form {
     
     render() { 
         
-        console.log("data",this.state.data)
         return (
-        <div>
-            
-            <form onSubmit={this.handleSubmit}>
-            <div className="row">
-            <div className="mr-2"></div>
-            <div className="col-3 m-1">
-            {this.renderInput("name","Name")}
-            </div>
-            <div className="col-3 m-1">
-            {this.renderInput("desc","Desc",)}
-            </div>
-            <div className="col-3 m-1">
-            {this.renderButton("Save")} 
-            </div>
-            </div>
-            </form>
-        </div> );
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="row">
+                        <div className="mr-2"></div>
+                        <div className="col-3 m-1">
+                            {this.renderInput("name","Name")}
+                        </div>
+                        <div className="col-3 m-1">
+                            {this.renderInput("desc","Desc",)}
+                        </div>
+                        <div className="col-3 m-1">
+                            {this.renderButton("Save")} 
+                        </div>
+                        <div className="col-1">
+                            <button 
+                                onClick={() => this.props.onDelete(this.props.workOrder)} 
+                                className="btn-warn btn-sm mt-3">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div> 
+        );
     }
 }
  

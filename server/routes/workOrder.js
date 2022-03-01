@@ -13,15 +13,49 @@ router.get('/', (req, res)=> {
   
 });
 
-router.delete("/:id", async (req, res) => {
-  const timeEntry = ("DELETE FROM workorders WHERE name = ?");
+router.post("/", (req, res)=>{
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const name = req.body.name
+  const desc = req.body.desc
 
-  if (!timeEntry)
+  const sqlInsert = "INSERT INTO workorders (name, desc) VALUES (?,?);"
+  
+  db.query(sqlInsert, [name, desc], (err, result)=>{
+  console.log(err);
+  }); 
+});
+
+
+router.put("/:id", async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+ 
+  const { name, desc } = req.body
+
+  const sqlUpdate = "UPDATE workorders SET name = ?, desc= ? WHERE _id = ?";
+
+  db.query(sqlUpdate, [name, desc, req.params.id], (err, result)=>{
+      if(err) console.log(err);
+      if (!result){
     return res
       .status(404)
       .send("The timeEntry with the given ID was not found.");
+      }
+  res.send(result);
+  })
+  
+});
 
-  res.send(timeEntry);
+router.delete("/:id", async (req, res) => {
+  const workOrder = ("DELETE FROM workorders WHERE name = ?");
+ 
+  if (!workOrder)
+    return res
+      .status(404)
+      .send("The workOrder with the given ID was not found.");
+
+  res.send(workOrder);
 });
 
 module.exports = router;
