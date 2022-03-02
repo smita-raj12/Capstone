@@ -4,7 +4,8 @@ import moment from 'moment';
 import {getTimeEntries,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
 import { toast } from "react-toastify";
 import { getWorkOrders} from '../services/WorkOrderService'
-
+import ListGroupHeader from '../common/ListGroupHeader';
+import _ from "lodash";
 
 class TimeEntries extends Component {
 
@@ -14,7 +15,8 @@ class TimeEntries extends Component {
         dateArray: [],
         weekArray: [],
         startDate: "2021-01-01",
-        maxId: 0
+        maxId: 0,
+        sortColumn: { path: "title", order: "Desc" }
     };
     
     
@@ -72,25 +74,20 @@ class TimeEntries extends Component {
         
         try {
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
-      
             if (timeEntry._id.startsWith("new")) {
                 const timeEntries = this.state.timeEntries;
-             
-      
-              timeEntries.push({
-                _id: newTimeEntry._id,
-                date: timeEntry.date,
-                week: moment(timeEntry.date, "MM-DD-YYYY").week(),
-                workOrder: " ",
-                hours: " ",
-              });
-      
-              
-              this.setState({ timeEntries });
+                timeEntries.push({
+                    _id: newTimeEntry._id,
+                    date: timeEntry.date,
+                    week: moment(timeEntry.date, "MM-DD-YYYY").week(),
+                    workOrder: " ",
+                    hours: " ",
+                });
+                this.setState({ timeEntries });
             }
-          } catch (ex) {
+        } catch (ex) {
             if (ex.response) console.log("ex.repsonse", ex.response);
-          }
+        }
     };
     
     handleDelete = async (timeEntry) => {
@@ -101,7 +98,6 @@ class TimeEntries extends Component {
         this.setState({ timeEntries });
     
         try {
-            
             await deleteTimeEntry(timeEntry._id);
         } catch (ex) {
             console.log("HANDLE DELETE CATCH BLOCK");
@@ -112,7 +108,11 @@ class TimeEntries extends Component {
     };
 
     getPageData(){
-        const { timeEntries: allTimeEntries, dateArray, startDate, maxId} = this.state
+        const { timeEntries: allTimeEntries,
+             dateArray,
+              startDate,
+               sortColumn,
+               maxId} = this.state
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
@@ -127,14 +127,40 @@ class TimeEntries extends Component {
                 formType:"New"
             })
         );
-        return {data: timeentriesWithinDateRange}
+        var filtered = timeentriesWithinDateRange
+        if(sortColumn.path=== "title"){
+            sortColumn.path = "date";
+            sortColumn.order= "desc"
+          }
+          const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        return {data: sorted}
     }
     
+    columns = [
+        {path:"week", label: "Week", width: "1"},
+        { path: "date",label: "Date",width: "2"},
+        { path: "workOrder.name", label: "Work Order Number", width: "2" },
+        { path: "workOrder.description", label: "Work Order Description", width: "3" },
+        { path: "hours", label: "Hours", width: 1 },
+    ];
+
+    handleSort = (sortColumn) => {
+        console.log("sortColumn", sortColumn);
+        this.setState({ sortColumn });
+    };
     
     render() {
         const { data}  = this.getPageData();
+        const {sortColumn } = this.state
         return (
             <div>
+                <p>Showing time in the database.</p>
+                <ListGroupHeader
+                    columns={this.columns}
+                    sortColumn={sortColumn}
+                    onSort={this.handleSort}
+                />
+
                 <div> {data.map((item) => {
                         return <div  key={item._id}
                         className="list-inline-item list-group-item-info">            
