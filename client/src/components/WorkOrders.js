@@ -79,12 +79,12 @@ class WorkOrders extends Component {
     return (
       
       <div> {workOrders.map((item) => {
-                          return <div  key={item._id}
-                          className="list-inline-item list-group-item-info">      
-          <WorkOrderForm 
-            workOrder={item}
-            onDelete={this.handleDelete}
-            onSave={this.handleSave}
+              return <div  key={item._id}
+              className="list-inline-item list-group-item-info">      
+            <WorkOrderForm 
+              workOrder={item}
+              onDelete={this.handleDelete}
+              onSave={this.handleSave}
           /> 
       </div>
     })}

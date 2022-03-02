@@ -4,7 +4,7 @@ class ListGroupHeader extends Component {
     raiseSort = (path) => {
         const sortColumn = { ...this.props.sortColumn };
         if (sortColumn.path === path)
-            sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+            sortColumn.order = sortColumn.order === "asc" ? "asc" : "desc";
         else {
             sortColumn.path = path;
             sortColumn.order = "asc";
@@ -20,7 +20,6 @@ class ListGroupHeader extends Component {
         if (column.path !== sortColumn.path) return null;
         if (sortColumn.order === "asc") return <i className="fa fa-sort-down "  />;
         return <i className="fa fa-sort-up"></i>;    
-           
     };
 
     render() {

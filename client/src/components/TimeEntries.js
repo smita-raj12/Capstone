@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { getWorkOrders} from '../services/WorkOrderService'
 import ListGroupHeader from '../common/ListGroupHeader';
 import _ from "lodash";
+import SelectBox from './SelectBox';
+import SearchBox from './SearchBox';
 
 class TimeEntries extends Component {
 
@@ -16,7 +18,11 @@ class TimeEntries extends Component {
         weekArray: [],
         startDate: "2021-01-01",
         maxId: 0,
-        sortColumn: { path: "title", order: "Desc" }
+        sortColumn: { path: "title", order: "Desc" },
+        selectedWorkOrder: null,
+        selectedDate: null,
+        selectedWeek:null,
+        searchQuery: ""
     };
     
     
@@ -36,10 +42,12 @@ class TimeEntries extends Component {
             hours: o.hours,
             formType: "data"
         }))
-       
         
         var dateArray = [];
-       
+        var weekArray = [];
+        let prevWeekNumber = [];
+        let weekNumber = " ";
+
         var currentDate = moment(
             moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
         );
@@ -53,6 +61,7 @@ class TimeEntries extends Component {
         );
 
         var x = 0
+        var y = 0
 
         while (currentDate <= stopDate) {
 
@@ -64,8 +73,18 @@ class TimeEntries extends Component {
             x = x + 1;
             
         }
-        
-        this.setState({timeEntries, workOrders,dateArray, maxId, startDate})
+        weekNumber = moment(currentDate, "MM-DD-YYYY").week();
+     
+        if (weekNumber !== prevWeekNumber) {
+        weekArray.push({
+            _id: y,
+            name: weekNumber,
+        });
+        prevWeekNumber = weekNumber;
+        y = y +1;
+        //console.log(y)
+    }
+    this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray})
     }
     
     
@@ -109,10 +128,11 @@ class TimeEntries extends Component {
 
     getPageData(){
         const { timeEntries: allTimeEntries,
-             dateArray,
-              startDate,
-               sortColumn,
-               maxId} = this.state
+                dateArray,
+                startDate,
+                sortColumn,
+                maxId
+            } = this.state
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
@@ -131,8 +151,8 @@ class TimeEntries extends Component {
         if(sortColumn.path=== "title"){
             sortColumn.path = "date";
             sortColumn.order= "desc"
-          }
-          const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        }
+            const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
         return {data: sorted}
     }
     
@@ -149,11 +169,100 @@ class TimeEntries extends Component {
         this.setState({ sortColumn });
     };
     
+    handleReset = () => {
+        const selectedWorkOrder = null;
+        const selectedDate = null;
+        const selectedWeek = null;
+        this.setState({ selectedWorkOrder, selectedDate, selectedWeek, searchQuery: "" });
+    };
+    
+    handleWorkOrderSelect = (workOrder) => {
+        this.setState({
+            selectedWorkOrder: workOrder,
+            searchQuery: "",
+        });
+    };
+
+    handleDateSelect = (date) => {
+        const { dateArray } = this.state;
+        const selectedDate = dateArray[date].name;
+        this.setState({ selectedDate, searchQuery: "" });
+    };
+    
+    handleWeekSelect = (week) => {
+        const { weekArray } = this.state;
+      
+        const selectedWeek = weekArray[week].name;
+        this.setState({ selectedWeek, searchQuery: "" });
+    };
+    handleSearch = (query) => {
+        this.setState({ searchQuery: query });
+    };
     render() {
         const { data}  = this.getPageData();
-        const {sortColumn } = this.state
+        const {sortColumn,
+            searchQuery,
+            workOrders,
+            selectedDate,
+            selectedWeek,
+            selectedWorkOrder,
+            dateArray,
+            weekArray
+        } = this.state
+
+        const dateId = dateArray
+            .filter((o) => o.name === selectedDate)
+            .map((o) => o._id);
+        
+        const weekId = weekArray
+            .filter((o) => o.name === selectedWeek)
+            .map((o) => o._id);
+
+        let selectedWorkOrder1 = " ";
+        if (selectedWorkOrder){
+            selectedWorkOrder1 = selectedWorkOrder;
+        }
+
         return (
             <div>
+                <div className="row">
+                    <div className="col-1">
+                        <button
+                            onClick={this.handleReset}
+                            className="btn-danger btn-sm mt-3"
+                        >
+                        Reset
+                        </button>
+                    </div>
+                    <div className="col-2">
+                        <SelectBox
+                            name="WorkOrderId"
+                            options={workOrders}
+                            value={selectedWorkOrder1}
+                            onSort={this.handleSort}
+                            onChange={this.handleWorkOrderSelect}
+                        />
+                    </div>
+                    <div className="col-2">
+                        <SelectBox
+                            name="Date"
+                            options={dateArray}
+                            value={dateId}
+                            onChange={this.handleDateSelect}
+                        />
+                    </div>
+                    <div className="col-1">
+                        <SelectBox
+                            name="Week"
+                            options={weekArray}
+                            value={weekId}
+                            onChange={this.handleWeekSelect}
+                        />
+                    </div>
+                    <div className="col-6 mt-2">
+                        <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                    </div>
+                </div>
                 <p>Showing time in the database.</p>
                 <ListGroupHeader
                     columns={this.columns}
