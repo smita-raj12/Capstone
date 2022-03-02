@@ -127,6 +127,9 @@ class TimeEntryForm extends Form {
     render() {
 
     return (
+        <div>
+        
+        {this.props.timeEntry.formType.startsWith("New") && (  
         <form onSubmit={this.handleSubmit}>
             <div className="row">
             <div className="mr-2"></div>
@@ -166,6 +169,51 @@ class TimeEntryForm extends Form {
                 </div>
             </div>
         </form>
+        )}
+        {!this.props.timeEntry.formType.startsWith("New") && (  
+        <form onSubmit={this.handleSubmit}>
+            <div className="row">
+            <div className="mr-2"></div>
+
+                <div className="col-1 m-1">
+                    {this.renderInput("week", "Week")}
+                </div>
+
+                <div className="col-2">
+                    {this.renderInput("date", "Date", Date)}
+                </div>
+
+                <div className="col-2">
+                    {this.renderSelect(
+                        "workOrderId",
+                        "WorkOrder",
+                        this.state.workOrders
+                    )}
+                </div>
+
+                <div className="col-3">
+                    {this.handleSelect(this.state.data.workOrderId)}
+                </div>
+
+                <div className="col-1">
+                    {this.renderInput("hours", "Hours", Number)}
+                </div>
+
+                <div className="col-1">{this.renderButton("Save")}</div>
+                
+                <div className="col-1">
+                <button 
+                    onClick={() => this.props.onDelete(this.props.timeEntry)} 
+                    className="btn-warn btn-sm mt-3">
+                    Delete
+                </button>
+                </div>
+            </div>
+        </form>
+        )}
+       
+        </div>
+
         )
     }    
 } 

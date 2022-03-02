@@ -25,7 +25,7 @@ class WorkOrderForm extends Form {
 
     componentDidMount() {
         const {workOrder} = this.props
-        console.log(workOrder)
+        //console.log(workOrder)
         this.setState({ data: this.mapToViewModel(workOrder) });
     }
 
@@ -43,11 +43,12 @@ class WorkOrderForm extends Form {
         
         return (
             <div>
+            { this.props.workOrder._id === 0 && (
                 <form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <div className="mr-2"></div>
                         <div className="col-2 m-1">
-                            {this.renderInput("_id","ID", Number ,"readOnly")}
+                            {this.renderInput("_id","ID", " " ,"readOnly")}
                         </div>
                         <div className="col-2 m-1">
                             {this.renderInput("name","Name")}
@@ -67,6 +68,33 @@ class WorkOrderForm extends Form {
                         </div>
                     </div>
                 </form>
+                )}
+                { this.props.workOrder._id !== 0 && (
+                <form onSubmit={this.handleSubmit}>
+                    <div className="row">
+                        <div className="mr-2"></div>
+                        <div className="col-2 m-1">
+                            {this.renderInput("_id","ID", " " ,"readOnly")}
+                        </div>
+                        <div className="col-2 m-1">
+                            {this.renderInput("name","Name")}
+                        </div>
+                        <div className="col-3 m-1">
+                            {this.renderInput("description","description",)}
+                        </div>
+                        <div className="col-2 m-1">
+                            {this.renderButton("Save")} 
+                        </div>
+                        <div className="col-1">
+                            <button 
+                                onClick={() => this.props.onDelete(this.props.workOrder)} 
+                                className="btn-warn btn-sm mt-3">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                )}
             </div> 
         );
     }
