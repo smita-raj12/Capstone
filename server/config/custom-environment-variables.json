@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "timeentries_jwtPrivateKey",
+  "db":"timeentries_db"
+}
