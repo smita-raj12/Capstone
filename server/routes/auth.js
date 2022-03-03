@@ -12,35 +12,31 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
   
   const {email, password} = req.body;
-  var getUser = " "
-    if(email) 
-    { getUser = "SELECT * FROM users WHERE email = ?;"
-    db.query(getUser, [email], (err, result)=>{
-      console.log(err);
-      if (!result) return res.status(400).send("Invalid User Name and password.");
-      console.log("result",result[0].password)
-      //const user ={password: result[0].password,
-  //       email:result[0].email,
-  //     name:result[0].name}
-  //     console.log("user",user)
-  //     return user
-    }); }
-  //   console.log("compare" ,password, user1);
-  // const validPassword = await bcrypt.compare(password, user.password);
+ 
+    if(!email) return res.status(400).send("Invalid Email.");
+
+     let getUser = "SELECT * FROM users WHERE email = ?;"
+      db.query(getUser, [email], async (err, result)=>{
+      if(err) return res.status(400).send("Invalid Email.");
   
-  //if (!validPassword) return res.status(400).send('Invalid email or password.');
+      if (!result) return res.status(400).send("Invalid User Name and password.");
+      console.log("result",result[0])
+      
+      const validPassword = await bcrypt.compare(password, result[0].password);
+      
+      if (!validPassword) return res.status(400).send('Invalid email or password.');
+      const token = generateAuthToken(result[0]);
+      res.send(token);
+    }); 
+});
 
-//   const token = generateAuthToken(user1);
-//   res.send(token);
- });
+function validate(req) {
+  const schema = {
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required()
+  };
 
-// function validate(req) {
-//   const schema = {
-//     email: Joi.string().min(5).max(255).required().email(),
-//     password: Joi.string().min(5).max(255).required()
-//   };
-
-//   return Joi.validate(req, schema);
-// }
+  return Joi.validate(req, schema);
+}
 
 module.exports = router; 
