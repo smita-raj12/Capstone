@@ -93,7 +93,7 @@ class TimeEntries extends Component {
         
         try {
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
-            if (timeEntry._id.startsWith("new")) {
+            if (timeEntry._id.startsWith("New")) {
                 const timeEntries = this.state.timeEntries;
                 timeEntries.push({
                     _id: newTimeEntry._id,
@@ -143,14 +143,14 @@ class TimeEntries extends Component {
             moment(m.date).isSameOrAfter(startDate)
         );
         
-        var timeentrieswithDisplayOrder = timeentriesWithinDateRange.map((o) => ({
-            displayOrder: 2,
-            week: moment(o.date, "YYYY-MM-DD").week(),
-            ...o,
-        }));
+        // var timeentrieswithDisplayOrder = timeentriesWithinDateRange.map((o) => ({
+        //     displayOrder: 2,
+        //     week: moment(o.date, "YYYY-MM-DD").week(),
+        //     ...o,
+        // }));
 
         dateArray.map((o, id) =>
-            timeentrieswithDisplayOrder.push({
+        timeentriesWithinDateRange.push({
                 displayOrder:1,
                 date: o.name,
                 _id: maxId + id,
@@ -161,7 +161,7 @@ class TimeEntries extends Component {
             })
         );
 
-        var filtered = timeentrieswithDisplayOrder;
+        var filtered = timeentriesWithinDateRange;
         let groupByColumn = " ";
         let groupByColumnValue = " ";
         
@@ -190,10 +190,11 @@ class TimeEntries extends Component {
     
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
-        
+            console.log("selected date filter",filtered);
             if (!selectedWorkOrder && !searchQuery && !selectedWeek) {
                 groupByColumn = "date";
                 groupByColumnValue = selectedDate;
+                console.log("groupByColumnValue",groupByColumnValue)
             }
         }
     
@@ -215,6 +216,7 @@ class TimeEntries extends Component {
                 displayOrder: 1,
                 date: " ",
                 week: " ",
+                formType:"Summary",
                 groupByColumn:groupByColumnValue,
                 workOrder: " ",
                 hours: _.sumBy( groupByColumn , "hours"),
@@ -228,6 +230,7 @@ class TimeEntries extends Component {
                 filtered.push({
                 displayOrder: 1,
                 date: id,
+                formType:"Summary",
                 week: moment(id, "YYYY-MM-DD").week(),
                 workOrder: "",
                 hours: _.sumBy(date, "hours"),
@@ -276,6 +279,7 @@ class TimeEntries extends Component {
     handleDateSelect = (date) => {
         const { dateArray } = this.state;
         const selectedDate = dateArray[date].name;
+        console.log(selectedDate);
         this.setState({ selectedDate, searchQuery: "" });
     };
     
@@ -301,7 +305,8 @@ class TimeEntries extends Component {
             dateArray,
             weekArray
         } = this.state
-        console.log(weekArray)
+        
+        console.log("render data",data)
         const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);

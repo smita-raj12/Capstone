@@ -45,6 +45,7 @@ class TimeEntryForm extends Form {
     
     populateTimeEntry() {
         const { timeEntry } = this.props;
+        console.log("Form data",timeEntry )
         this.setState({ data: this.mapToViewModel(timeEntry) });
     }
     
@@ -125,11 +126,21 @@ class TimeEntryForm extends Form {
     
     
     render() {
+        const { timeEntry } = this.props;
 
     return (
         <div>
-        
-       
+        {timeEntry.formType.startsWith("Summary") && (
+            <div className="row bg-info">
+            <div>
+                <div className="col-4">{timeEntry.groupByColumn}</div>
+                <div className="col-4">======Total=============</div>
+                <div className="col">{timeEntry.hours}</div>
+                </div>
+            </div>
+        )}
+
+        {!timeEntry.formType.startsWith("Summary") && (  
         <form onSubmit={this.handleSubmit}>
             <div className="row">
             <div className="mr-2"></div>
@@ -169,12 +180,10 @@ class TimeEntryForm extends Form {
                 </div>
             </div>
         </form>
-      
-        
-       
+        )}   
         </div>
 
-        )
+        );
     }    
 } 
 
