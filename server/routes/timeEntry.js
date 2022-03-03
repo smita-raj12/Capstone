@@ -1,6 +1,6 @@
 const  {validate}  = require("../models/timeEntry");
 const db = require ("../startup/db");
-//const Joi = require("joi");
+
 
 const express = require("express");
 const router = express.Router();
@@ -10,8 +10,6 @@ router.get('/', (req, res)=> {
   
   const sqlGet = "SELECT _id, date(date), workOrderId, hours FROM timeentries";
   db.query(sqlGet, (err, result)=>{
-    //console.log(result, err);
-
       res.send(result);
   })
   
@@ -35,9 +33,8 @@ router.post("/", (req, res)=>{
 router.put("/:id", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
- 
-  const { workOrderId, hours } = req.body
 
+  const { workOrderId, hours } = req.body
   const sqlUpdate = "UPDATE timeentries SET workOrderId = ?, hours= ? WHERE _id = ?";
 
   db.query(sqlUpdate, [workOrderId, hours, req.params.id], (err, result)=>{
@@ -53,7 +50,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    //const id = req.body._id
+  
     const timeEntryDelete = "DELETE FROM timeentries WHERE _id = ?";
     db.query(timeEntryDelete, [req.params.id], (err, result)=>{
       if(err) console.log(err);
@@ -70,8 +67,6 @@ router.delete("/:id", async (req, res) => {
 router.get('/:max', (req, res)=> {
   const sqlGet = "SELECT MAX(_id) FROM timeentries";
   db.query(sqlGet, (err, result)=>{
-    //console.log(result, err);
-
       res.send(result);
   })
   
