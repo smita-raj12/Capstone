@@ -7,7 +7,6 @@ import { getWorkOrders} from '../services/WorkOrderService'
 import ListGroupHeader from '../common/ListGroupHeader';
 import _ from "lodash";
 import SelectBox from './SelectBox';
-import SearchBox from './SearchBox';
 
 class TimeEntries extends Component {
 
@@ -22,7 +21,7 @@ class TimeEntries extends Component {
         selectedWorkOrder: null,
         selectedDate: null,
         selectedWeek:null,
-        searchQuery: ""
+        
     };
     
     
@@ -132,7 +131,6 @@ class TimeEntries extends Component {
                 selectedWorkOrder,
                 selectedDate,
                 sortColumn,
-                searchQuery,
                 dateArray,
                 workOrders,
                 selectedWeek,
@@ -165,22 +163,12 @@ class TimeEntries extends Component {
         let groupByColumn = " ";
         let groupByColumnValue = " ";
         
-        console.log(filtered);
-    
-        if (searchQuery)
-      
-          filtered = filtered.filter(
-            (m) =>
-             
-              m.workOrder.name !== undefined &&
-              m.workOrder.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-          );
-          //console.log(filtered.workOrder);
+           
         if (selectedWorkOrder) {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
             console.log("filtered",filtered)
-            if (!searchQuery && !selectedDate && !selectedWeek) {
+            if (!selectedDate && !selectedWeek) {
                 groupByColumn = "workOrder";
                 groupByColumnValue = workOrders
                     .filter((o) => o._id === selectedWorkOrder)
@@ -191,7 +179,7 @@ class TimeEntries extends Component {
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
             console.log("selected date filter",filtered);
-            if (!selectedWorkOrder && !searchQuery && !selectedWeek) {
+            if (!selectedWorkOrder &&  !selectedWeek) {
                 groupByColumn = "date";
                 groupByColumnValue = selectedDate;
                 console.log("groupByColumnValue",groupByColumnValue)
@@ -202,7 +190,7 @@ class TimeEntries extends Component {
 
             filtered = filtered.filter((m) => m.week === selectedWeek);
         
-            if (!selectedWorkOrder && !searchQuery && !selectedDate) {
+            if (!selectedWorkOrder  && !selectedDate) {
                 groupByColumn = "week";
                 groupByColumnValue = selectedWeek;
             }
@@ -265,14 +253,14 @@ class TimeEntries extends Component {
         const selectedWorkOrder = null;
         const selectedDate = null;
         const selectedWeek = null;
-        this.setState({ selectedWorkOrder, selectedDate, selectedWeek, searchQuery: "" });
+        this.setState({ selectedWorkOrder, selectedDate, selectedWeek });
     };
     
     handleWorkOrderSelect = (workOrder) => {
         console.log("handleWorkOrderSelect",parseInt(workOrder));
         this.setState({
             selectedWorkOrder: parseInt(workOrder),
-            searchQuery: "",
+            
         });
     };
 
@@ -280,24 +268,20 @@ class TimeEntries extends Component {
         const { dateArray } = this.state;
         const selectedDate = dateArray[date].name;
         console.log(selectedDate);
-        this.setState({ selectedDate, searchQuery: "" });
+        this.setState({ selectedDate });
     };
     
     handleWeekSelect = (week) => {
         const { weekArray } = this.state;
       
         const selectedWeek = weekArray[week].name;
-        this.setState({ selectedWeek, searchQuery: "" });
-    };
-
-    handleSearch = (query) => {
-        this.setState({ searchQuery: query });
+        this.setState({ selectedWeek});
     };
 
     render() {
         const { data}  = this.getPageData();
         const {sortColumn,
-            searchQuery,
+            
             workOrders,
             selectedDate,
             selectedWeek,
@@ -336,7 +320,6 @@ class TimeEntries extends Component {
                             name="WorkOrderId"
                             options={workOrders}
                             value={selectedWorkOrder1}
-                            //onSort={this.handleSort}
                             onChange={this.handleWorkOrderSelect}
                         />
                     </div>
@@ -356,9 +339,6 @@ class TimeEntries extends Component {
                             onChange={this.handleWeekSelect}
                         />
                     </div>
-                    <div className="col-6 mt-2">
-                        <SearchBox value={searchQuery} onChange={this.handleSearch} />
-                    </div>
                 </div>
                 <p>Showing time in the database.</p>
                 <ListGroupHeader
@@ -372,6 +352,7 @@ class TimeEntries extends Component {
                         className="list-inline-item list-group-item-info">            
                         <TimeEntryForm
                             timeEntry={item}
+                            timeEntries={data}
                             onDelete={this.handleDelete}
                             onSave={this.handleSave}
                         />
