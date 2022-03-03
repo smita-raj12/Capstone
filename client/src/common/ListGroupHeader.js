@@ -14,9 +14,7 @@ class ListGroupHeader extends Component {
 
     renderSortIcon = (column) => {
         const { sortColumn } = this.props;
-        console.log("column",column )
-        console.log("sortColumn",sortColumn)
-
+        
         if (column.path !== sortColumn.path) return null;
         if (sortColumn.order === "asc") return <i className="fa fa-sort-down "  />;
         return <i className="fa fa-sort-up"></i>;    

@@ -72,17 +72,17 @@ class TimeEntries extends Component {
             currentDate = moment(currentDate).add(1, "days");
             x = x + 1;
             
-        }
-        weekNumber = moment(currentDate, "MM-DD-YYYY").week();
+            weekNumber = moment(currentDate, "YYYY-MM-DD").week();
      
-        if (weekNumber !== prevWeekNumber) {
-        weekArray.push({
-            _id: y,
-            name: weekNumber,
-        });
-        prevWeekNumber = weekNumber;
-        y = y +1;
-        //console.log(y)
+            if (weekNumber !== prevWeekNumber) {
+            weekArray.push({
+                _id: y,
+                name: weekNumber,
+            });
+            prevWeekNumber = weekNumber;
+            y = y +1;
+            //console.log(y)
+        }
     }
     this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray})
     }
@@ -98,7 +98,7 @@ class TimeEntries extends Component {
                 timeEntries.push({
                     _id: newTimeEntry._id,
                     date: timeEntry.date,
-                    week: moment(timeEntry.date, "MM-DD-YYYY").week(),
+                    week: moment(timeEntry.date, "YYYY-MM-DD").week(),
                     workOrder: " ",
                     hours: " ",
                 });
@@ -128,17 +128,30 @@ class TimeEntries extends Component {
 
     getPageData(){
         const { timeEntries: allTimeEntries,
-                dateArray,
                 startDate,
+                selectedWorkOrder,
+                selectedDate,
                 sortColumn,
+                searchQuery,
+                dateArray,
+                workOrders,
+                selectedWeek,
                 maxId
             } = this.state
+
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
         
+        var timeentrieswithDisplayOrder = timeentriesWithinDateRange.map((o) => ({
+            displayOrder: 2,
+            week: moment(o.date, "YYYY-MM-DD").week(),
+            ...o,
+        }));
+
         dateArray.map((o, id) =>
-            timeentriesWithinDateRange.push({
+            timeentrieswithDisplayOrder.push({
+                displayOrder:1,
                 date: o.name,
                 _id: maxId + id,
                 week: moment(o.name, "YYYY-MM-DD").week(),
@@ -147,7 +160,83 @@ class TimeEntries extends Component {
                 formType:"New"
             })
         );
-        var filtered = timeentriesWithinDateRange
+
+        var filtered = timeentrieswithDisplayOrder;
+        let groupByColumn = " ";
+        let groupByColumnValue = " ";
+        
+        console.log(filtered);
+    
+        if (searchQuery)
+      
+          filtered = filtered.filter(
+            (m) =>
+             
+              m.workOrder.name !== undefined &&
+              m.workOrder.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+          );
+          //console.log(filtered.workOrder);
+        if (selectedWorkOrder) {
+            
+            filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
+            console.log("filtered",filtered)
+            if (!searchQuery && !selectedDate && !selectedWeek) {
+                groupByColumn = "workOrder";
+                groupByColumnValue = workOrders
+                    .filter((o) => o._id === selectedWorkOrder)
+                    .map((o) => o.name);
+            }
+        }
+    
+        if (selectedDate) {
+            filtered = filtered.filter((m) => m.date === selectedDate);
+        
+            if (!selectedWorkOrder && !searchQuery && !selectedWeek) {
+                groupByColumn = "date";
+                groupByColumnValue = selectedDate;
+            }
+        }
+    
+        if (selectedWeek) {
+
+            filtered = filtered.filter((m) => m.week === selectedWeek);
+        
+            if (!selectedWorkOrder && !searchQuery && !selectedDate) {
+                groupByColumn = "week";
+                groupByColumnValue = selectedWeek;
+            }
+        }
+    
+        if (groupByColumn > " ") {
+          _(filtered)
+            .groupBy( groupByColumn )
+            .map(( groupByColumn ) =>
+              filtered.push({
+                displayOrder: 1,
+                date: " ",
+                week: " ",
+                groupByColumn:groupByColumnValue,
+                workOrder: " ",
+                hours: _.sumBy( groupByColumn , "hours"),
+              })
+            )
+            .value();
+        }else {
+          _(filtered)
+          .groupBy("date")
+          .map((date, id) =>
+                filtered.push({
+                displayOrder: 1,
+                date: id,
+                week: moment(id, "YYYY-MM-DD").week(),
+                workOrder: "",
+                hours: _.sumBy(date, "hours"),
+            })
+        )
+        .value();
+        _.groupBy(filtered, "date")
+        }
+
         if(sortColumn.path=== "title"){
             sortColumn.path = "date";
             sortColumn.order= "desc"
@@ -177,8 +266,9 @@ class TimeEntries extends Component {
     };
     
     handleWorkOrderSelect = (workOrder) => {
+        console.log("handleWorkOrderSelect",parseInt(workOrder));
         this.setState({
-            selectedWorkOrder: workOrder,
+            selectedWorkOrder: parseInt(workOrder),
             searchQuery: "",
         });
     };
@@ -195,9 +285,11 @@ class TimeEntries extends Component {
         const selectedWeek = weekArray[week].name;
         this.setState({ selectedWeek, searchQuery: "" });
     };
+
     handleSearch = (query) => {
         this.setState({ searchQuery: query });
     };
+
     render() {
         const { data}  = this.getPageData();
         const {sortColumn,
@@ -209,7 +301,7 @@ class TimeEntries extends Component {
             dateArray,
             weekArray
         } = this.state
-
+        console.log(weekArray)
         const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);
@@ -239,7 +331,7 @@ class TimeEntries extends Component {
                             name="WorkOrderId"
                             options={workOrders}
                             value={selectedWorkOrder1}
-                            onSort={this.handleSort}
+                            //onSort={this.handleSort}
                             onChange={this.handleWorkOrderSelect}
                         />
                     </div>
