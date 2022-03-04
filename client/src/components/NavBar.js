@@ -1,7 +1,8 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
 
-function NavBar({ user }) {
+function NavBar( {user }) {
+    
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
         {user}
@@ -13,39 +14,36 @@ function NavBar({ user }) {
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation">
-
             <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-                <NavLink className="nav-link" to="/TimeEntries">
-                    TimeEntries
-                </NavLink>
-                <NavLink className="nav-link" to="/WorkOrders">
-                    WorkOrders
-                </NavLink>
-                <NavLink className="nav-link" to="/Controlers">
-                    Controlers
-                </NavLink>
-                {!user &&(
-                    <React.Fragment>
-                        <NavLink className="nav-link" to='/Register'>
-                            Register
-                        </NavLink>
-                        <NavLink className="nav-link" to='/Login'>
-                            Login
-                        </NavLink>
-                    </React.Fragment>
-                )}
-                {user && (
-                    <React.Fragment>
-                    <NavLink className="nav-link" to="/profile">
-                        {user}
+            {user === ' ' && (
+                <React.Fragment>
+                    <NavLink className="nav-link" to='/Register'>
+                        Register
                     </NavLink>
-                    <NavLink className="nav-link" to="/logout">
+                    <NavLink className="nav-link" to='/Login'>
+                        Login
+                    </NavLink>
+                </React.Fragment>
+            )}
+            {user !== ' ' && (
+                <React.Fragment>
+                    <NavLink className="nav-link" to="/TimeEntries">
+                        TimeEntries
+                    </NavLink>
+                    <NavLink className="nav-link" to="/WorkOrders">
+                        WorkOrders
+                    </NavLink>
+                    <NavLink className="nav-link" to="/Controlers">
+                        Controlers
+                    </NavLink>
+                
+                    <NavLink className="nav-link" to="/Logout">
                         Logout
                     </NavLink>
-                    </React.Fragment>
+                </React.Fragment>
                 )}
             </ul>
         </div>
