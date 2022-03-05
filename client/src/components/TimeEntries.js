@@ -166,7 +166,7 @@ class TimeEntries extends Component {
             })
         );
 
-        console.log("timeentriesWithinDateRange",timeentriesWithinDateRange)
+        
 
         var filtered = timeentriesWithinDateRange;
         let groupByColumn = " ";

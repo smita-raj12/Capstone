@@ -3,12 +3,13 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 
 function generateAuthToken (user) {
-  console.log("user",user)
+ 
   const token = jwt.sign(
     {
       id: user.id,
       name: user.name,
       email: user.email,
+      role:user.role
     },
     config.get("jwtPrivateKey")
   );
@@ -29,7 +30,11 @@ function validateUser(user) {
     password: Joi.string()
       .min(5)
       .max(255)
-      .required()
+      .required(),
+    role: Joi.string()
+      .min(3)
+      .max(15)
+      .required()  
   };
 
   return Joi.validate(user, schema);

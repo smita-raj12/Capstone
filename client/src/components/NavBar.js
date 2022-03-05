@@ -1,11 +1,11 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
 
-function NavBar( {user }) {
+function NavBar( {role }) {
     
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        {user}
+    <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        {role}
         <button
             className="navbar-toggler"
             type="button"
@@ -18,7 +18,7 @@ function NavBar( {user }) {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-            {user === ' ' && (
+            {!role && (
                 <React.Fragment>
                     <NavLink className="nav-link" to='/Register'>
                         Register
@@ -28,7 +28,7 @@ function NavBar( {user }) {
                     </NavLink>
                 </React.Fragment>
             )}
-            {user !== ' ' && (
+            {(role === "USER" || role === "MANAGER") && (
                 <React.Fragment>
                     <NavLink className="nav-link" to="/TimeEntries">
                         TimeEntries
@@ -36,10 +36,18 @@ function NavBar( {user }) {
                     <NavLink className="nav-link" to="/WorkOrders">
                         WorkOrders
                     </NavLink>
+                   
+                </React.Fragment>
+            )}
+            {role === "MANAGER" && ( 
+                <React.Fragment>       
                     <NavLink className="nav-link" to="/Controlers">
                         Controlers
                     </NavLink>
-                
+                </React.Fragment>    
+            )}
+            {role && (    
+                <React.Fragment> 
                     <NavLink className="nav-link" to="/Logout">
                         Logout
                     </NavLink>

@@ -31,7 +31,6 @@ router.post("/", (req, res)=>{
  
   const sqlInsert = "INSERT INTO timeentries (date, workOrderId,hours,emailId) VALUES (?,?,?,?);"
   
-  console.log(sqlInsert)
   db.query(sqlInsert, [date, workOrderId, hours, emailId], (err, result)=>{
   console.log(err);
   }); 

@@ -1,21 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import { Route,Redirect} from 'react-router';
 import auth from '../services/authService';
 
+function ProtectedRoute({path,component:Component,role,render,...rest}) {
 
-const ProtectedRoute = ({path,component:Component,render,...rest}) => {
-    return (   
-            <Route
-              {...rest}
-                render={props=>{
-                    if (!auth.getCurrentUser()) return <Redirect to={{
-                        pathname:'/Login',
-                        state:{from :props.location}
-                    }}/>;
-                        return Component ? <Component {...props}/>: render(props);
-                }}
-            />
-          );
+    const [ User, setCurrentUser ] = useState({});
+
+    useEffect (()=>{
+        var  currentUser = auth.getCurrentUser();
+        console.log(currentUser)
+        var User = currentUser
+        setCurrentUser (User);
+        console.log("protected current user",User);
+    },[])
+   
+  return (
+    <Route
+    {...rest}
+      render={props=>{
+          if (!User) return <Redirect to={{
+              pathname:'/Login',
+              state:{from :props.location}
+          }}/>;
+          if (User.role === role || role === "ANY") return Component ? <Component {...props}/>: render(props);
+      }}
+  />
+  )
 }
- 
-export default ProtectedRoute;
+
+export default ProtectedRoute

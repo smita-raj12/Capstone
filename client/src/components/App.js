@@ -17,11 +17,11 @@ import ProtectedRoute from '../common/ProtectedRoute';
 
 function App() {
 
-  const [ user , setUser] = useState ("");
+  const [ user , setUser] = useState ({});
 
   useEffect(() => {
       const user1 = auth.getCurrentUser();
-      var user = " ";
+      var user = [];
       if(user1 !== null){
           user = user1;
       } 
@@ -34,7 +34,7 @@ function App() {
       <ToastContainer />
       <Router>
           <div className="container">
-          <NavBar user = {user.name}/>
+          <NavBar role = {user.role}/>
           <Switch>
             <Route path="/Register" component={Register} />
             <Route path="/Login" component={Login} />
@@ -43,10 +43,10 @@ function App() {
             <ProtectedRoute path="/TimeEntries" 
             render = {(props)=>(
               <TimeEntries {...props} emailId = {user.id} />
-            )} />
+            )} role = {"ANY"}  />
             
-            <ProtectedRoute path="/WorkOrders" component={WorkOrders} />
-            <Route path="/Controlers" component={Controlers} />
+            <ProtectedRoute path="/WorkOrders" component={WorkOrders} role = {"ANY"}/>
+            <ProtectedRoute path="/Controlers" component={Controlers} role = {"MANAGER"} />
             <Route path="/PageNotFound" component={PageNotFound} />
             <Redirect from="/" exact to="/TimeEntries" />
             <Redirect to="/PageNotFound" />

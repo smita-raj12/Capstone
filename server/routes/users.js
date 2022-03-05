@@ -7,9 +7,9 @@ const router = express.Router();
 const db = require ("../startup/db");
 
 router.get("/me", auth, async (req, res) => {
-  const {email,password,name} = req.body;
+  const {email,password,name, role} = req.body;
   const user = "SELECT * FROM users WHERE email = ?;"
-  db.query(user, [email, password, name], (err, result)=>{
+  db.query(user, [email, password, name, role], (err, result)=>{
     console.log(err);
   }); 
   res.send(user);
@@ -18,7 +18,7 @@ router.get("/me", auth, async (req, res) => {
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-    const {email,password,name} = req.body;
+    const {email,password,name,role} = req.body;
     var getUser = " "
     if(email) 
     { getUser = "SELECT * FROM users WHERE email = ?;"}
@@ -27,20 +27,20 @@ router.post("/", async (req, res) => {
       if (!result) return res.status(400).send("User already registered.");
     }); 
 
-    const user = {name:name, email:email,password:password}
+    const user = {name:name, email:email,password:password,role:role}
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     
-    insertUser = "INSERT INTO users (email, password, name) VALUES (?,?,?);"
-    db.query(insertUser,[user.email, user.password, user.name], (err, result)=>{
-      console.log(err);
+    insertUser = "INSERT INTO users (email, password, name, role) VALUES (?,?,?,?);"
+    db.query(insertUser,[email, password, name, role], (err, result)=>{
+     if(err) res.send("Error while registering user");
     }); 
 
   const token = generateAuthToken(user);
   res
     .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email"]));
+    .send(_.pick(user, ["_id", "name", "email","role"]));
 });
 
 module.exports = router;

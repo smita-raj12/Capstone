@@ -7,7 +7,6 @@ router.get("/", (req, res)=> {
 
   const sqlGet = "SELECT MAX(_id) FROM timeentries";
   db.query(sqlGet, (err, result)=>{
-      console.log(result, err);
       res.send(result);
   })
   

@@ -1,6 +1,6 @@
 import React from "react";
 import Joi from "joi-browser";
-import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "../common/Form";
 import moment from "moment";
 import { getWorkOrders } from "../services/WorkOrderService";
@@ -132,10 +132,16 @@ class TimeEntryForm extends Form {
         return (
             <div>
                 {timeEntry.formType.startsWith("Summary") && (
-                    <div className="row bg-info m-2">
-                        <div className="col">{timeEntry.groupByColumn}</div>
-                        <div className="col">======Total=============</div>
-                        <div className="col">{timeEntry.hours}</div>
+                    <div className="row bg-info ">
+                        <div className="col-1 m-1">
+                             <div >{timeEntry.groupByColumn}</div>
+                        </div>
+                        <div className="col-1 m-1">
+                            <div >======Total==========+++++++++++++++++++++++++++++++===</div>
+                        </div>
+                        <div className="col-1 m-1">
+                        <div >{timeEntry.hours}</div>
+                        </div>
                     </div>
                 )}
 
