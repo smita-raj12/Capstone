@@ -25,12 +25,11 @@ class WorkOrderForm extends Form {
 
     componentDidMount() {
         const {workOrder} = this.props
-        //console.log(workOrder)
         this.setState({ data: this.mapToViewModel(workOrder) });
     }
 
     mapToViewModel(workOrder) {
-       
+
         return {
             _id: workOrder._id,
             name: workOrder.name,
@@ -43,7 +42,6 @@ class WorkOrderForm extends Form {
         
         return (
             <div>
-           
                 <form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <div className="mr-2"></div>
@@ -68,8 +66,7 @@ class WorkOrderForm extends Form {
                         </div>
                     </div>
                 </form>
-               
-               </div>
+            </div>
         );
     }
 }

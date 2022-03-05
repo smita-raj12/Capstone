@@ -7,7 +7,6 @@ const router = express.Router();
 const db = require ("../startup/db");
 
 router.get("/me", auth, async (req, res) => {
-  console.log("user", req);
   const {email,password,name} = req.body;
   const user = "SELECT * FROM users WHERE email = ?;"
   db.query(user, [email, password, name], (err, result)=>{
@@ -30,10 +29,9 @@ router.post("/", async (req, res) => {
 
     const user = {name:name, email:email,password:password}
 
-    // const user = new User(_.pick(req.body, ["name", "email", "password"]));
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
-    //console.log("hashed password",user.password);
+    
     insertUser = "INSERT INTO users (email, password, name) VALUES (?,?,?);"
     db.query(insertUser,[user.email, user.password, user.name], (err, result)=>{
       console.log(err);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import {getTimeEntries,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
+import {getTimeEntryEmailId,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
 import { toast } from "react-toastify";
 import { getWorkOrders} from '../services/WorkOrderService'
 import ListGroupHeader from '../common/ListGroupHeader';
@@ -21,27 +21,32 @@ class TimeEntries extends Component {
         selectedWorkOrder: null,
         selectedDate: null,
         selectedWeek:null,
-        
+        CurrentEmailId:0
     };
     
     
     
     async componentDidMount() {
-        const  { data: workOrders }  =  await getWorkOrders();
-        const { data } = await getTimeEntries();
-        const { data:maxData } = await getTimeEntryMaxId();
         
+        const  { data: workOrders }  =  await getWorkOrders();
+        const { data } = await getTimeEntryEmailId(this.props.emailId);
+        var CurrentEmailId = this.props.emailId;
+        // const { data } = await getTimeEntries()
+        
+        const { data:maxData } = await getTimeEntryMaxId();    
         const maxId = maxData[0]["MAX(_id)"] +1;
+        
         
         const timeEntries = data.map(o=>({
             _id : o._id,
+            emailId : CurrentEmailId,
             week: moment(moment(o.date).format("YYYY-MM-DD")).week(),
             date: moment(o.date).format("YYYY-MM-DD"),
             workOrderId: o.workOrderId,
             hours: o.hours,
             formType: "data"
         }))
-        
+
         var dateArray = [];
         var weekArray = [];
         let prevWeekNumber = [];
@@ -83,7 +88,7 @@ class TimeEntries extends Component {
             //console.log(y)
         }
     }
-    this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray})
+    this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray,CurrentEmailId})
     }
     
     
@@ -134,7 +139,8 @@ class TimeEntries extends Component {
                 dateArray,
                 workOrders,
                 selectedWeek,
-                maxId
+                maxId,
+                CurrentEmailId
             } = this.state
 
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
@@ -155,9 +161,12 @@ class TimeEntries extends Component {
                 week: moment(o.name, "YYYY-MM-DD").week(),
                 workOrder: 0,
                 hours: 0,
-                formType:"New"
+                formType:"New",
+                emailId:CurrentEmailId
             })
         );
+
+        console.log("timeentriesWithinDateRange",timeentriesWithinDateRange)
 
         var filtered = timeentriesWithinDateRange;
         let groupByColumn = " ";
@@ -178,7 +187,7 @@ class TimeEntries extends Component {
     
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
-            console.log("selected date filter",filtered);
+        
             if (!selectedWorkOrder &&  !selectedWeek) {
                 groupByColumn = "date";
                 groupByColumnValue = selectedDate;
@@ -187,7 +196,6 @@ class TimeEntries extends Component {
         }
     
         if (selectedWeek) {
-
             filtered = filtered.filter((m) => m.week === selectedWeek);
         
             if (!selectedWorkOrder  && !selectedDate) {
@@ -257,7 +265,6 @@ class TimeEntries extends Component {
     };
     
     handleWorkOrderSelect = (workOrder) => {
-        console.log("handleWorkOrderSelect",parseInt(workOrder));
         this.setState({
             selectedWorkOrder: parseInt(workOrder),
             
@@ -267,13 +274,11 @@ class TimeEntries extends Component {
     handleDateSelect = (date) => {
         const { dateArray } = this.state;
         const selectedDate = dateArray[date].name;
-        console.log(selectedDate);
         this.setState({ selectedDate });
     };
     
     handleWeekSelect = (week) => {
         const { weekArray } = this.state;
-      
         const selectedWeek = weekArray[week].name;
         this.setState({ selectedWeek});
     };
@@ -281,7 +286,6 @@ class TimeEntries extends Component {
     render() {
         const { data}  = this.getPageData();
         const {sortColumn,
-            
             workOrders,
             selectedDate,
             selectedWeek,
@@ -290,7 +294,6 @@ class TimeEntries extends Component {
             weekArray
         } = this.state
         
-        console.log("render data",data)
         const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);

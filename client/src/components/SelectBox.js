@@ -7,7 +7,7 @@ const SelectBox = ({
     options,
     onChange,
 }) => {
-  //console.log("value",value);
+  
     return (
         <Select
             name={name}

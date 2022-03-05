@@ -9,7 +9,7 @@ import { getWorkOrders } from "../services/WorkOrderService";
 class TimeEntryForm extends Form {
     state = {
         data: { date: moment(moment(), "YYYY-MM-DD").subtract(3, "months").format("YYYY-MM-DD"),
-        workOrderId: 0, week: 0, hours: 0, formType:" " },
+        workOrderId: 0, week: 0, hours: 0, emailId: 0,formType:" " },
         workOrders: [],
         timeEntries: [],
         errors: {},
@@ -24,6 +24,7 @@ class TimeEntryForm extends Form {
             .label("Date"),
         week: Joi.number(),
         workOrderId: Joi.number().label("WorkOrderId"),
+        emailId: Joi.number().label("emailId"),
         hours: Joi.number().min(1).max(24),
         formType: Joi.string().max(24).required()
     };
@@ -77,6 +78,7 @@ class TimeEntryForm extends Form {
             _id: TimeEntry._id,
             date: TimeEntry.date,
             workOrderId: TimeEntry.workOrderId,
+            emailId: TimeEntry.emailId,
             week: TimeEntry.week,
             hours: TimeEntry.hours,
             formType: TimeEntry.formType
@@ -85,42 +87,42 @@ class TimeEntryForm extends Form {
     
     customValidation = (input) => {
         
-        // const { date } = this.state.data;
+        const { date } = this.state.data;
     
-        // var customError = " ";
-        // var totalHoursperday = 0;
+        var customError = " ";
+        var totalHoursperday = 0;
 
-        // this.populateTimeEntries();
-        // const origionaltimeEntries = this.state.timeEntries;
+        this.populateTimeEntries();
+        const origionaltimeEntries = this.state.timeEntries;
        
-        // const timeEntriesforthedate = origionaltimeEntries.filter(
-        //     (m) => m.date === date
-        // );
+        const timeEntriesforthedate = origionaltimeEntries.filter(
+            (m) => m.date === date
+        );
     
-        // if (input.name === "hours") {
-        //     totalHoursperday = input.value;
-        // }
+        if (input.name === "hours") {
+            totalHoursperday = input.value;
+        }
     
-        // for (let i = 0; i < timeEntriesforthedate.length; i++) {
-        //     if (input.name === "workOrderId") {
-        //         if (
-        //             timeEntriesforthedate[i].date === date &&
-        //             timeEntriesforthedate[i].workOrder._id === input.value
-        //         ) {
-        //             return (customError = "Duplicate work order ");
-        //         }
-        //     }
+        for (let i = 0; i < timeEntriesforthedate.length; i++) {
+            if (input.name === "workOrderId") {
+                if (
+                    timeEntriesforthedate[i].date === date &&
+                    timeEntriesforthedate[i].workOrder._id === input.value
+                ) {
+                    return (customError = "Duplicate work order ");
+                }
+            }
     
-        //     if (input.name === "hours") {
-        //         totalHoursperday =
-        //             parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
-        //         if (totalHoursperday > 24) {
-        //             return (customError = "Total hours per day can't be more than 24 ");
-        //         }
-        //     }
-        // }
+            if (input.name === "hours") {
+                totalHoursperday =
+                    parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
+                if (totalHoursperday > 24) {
+                    return (customError = "Total hours per day can't be more than 24 ");
+                }
+            }
+        }
     
-        // return customError > " " ? customError : null;
+        return customError > " " ? customError : null;
     };
     
     

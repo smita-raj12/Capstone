@@ -17,14 +17,13 @@ class WorkOrders extends Component {
       name: " ",
       description: " "
     })
-    console.log(workOrders);
     this.setState({workOrders})
   }
 
   handleSave =  async (workOrder) => {
     try {
       const { data: newWorkOrder } = await saveWorkOrder(workOrder);
-      console.log("newWorkOrder",newWorkOrder.insertId)
+      
       if (workOrder._id === 0) {
       const workOrders = this.state.workOrders;
       for (let i=0;i < workOrders.length;i++)
@@ -54,8 +53,7 @@ class WorkOrders extends Component {
         this.setState({ workOrders });
     
         try {
-            
-            await deleteWorkOrder(workOrder._id);
+              await deleteWorkOrder(workOrder._id);
         } catch (ex) {
             console.log("HANDLE DELETE CATCH BLOCK");
             if (ex.response && ex.response.status === 404)

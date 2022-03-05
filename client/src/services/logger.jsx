@@ -16,7 +16,6 @@ function init() {
 }
 
 function log(error){
-    console.log('logger',error)
     return null
  //   Raven.captureException(error)
 

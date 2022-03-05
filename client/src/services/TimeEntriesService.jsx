@@ -7,18 +7,24 @@ function timeEntryUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
+function timeEntryUrlEmailId(email) {
+  return `${apiEndpoint}/email/${email}`;
+}
+
 function timeEntryUrlMaxId() {
-  return `${apiEndpoint}/max`;
+  return "/maxTimeEntry";
 }
 
 export function getTimeEntries() {
-    console.log("test",apiEndpoint)
     return http.get(apiEndpoint);
 }
 
 export function getTimeEntryMaxId() {
-  console.log("test",apiEndpoint)
   return http.get(timeEntryUrlMaxId());
+}
+
+export function getTimeEntryEmailId(email) {
+  return http.get(timeEntryUrlEmailId(email));
 }
 
 export function getTimeEntry(timeEntryId) {
@@ -26,14 +32,13 @@ export function getTimeEntry(timeEntryId) {
 }
 
 export function saveTimeEntry(timeEntry) {
-  console.log("timeEntry", timeEntry);
+
   if (!timeEntry.formType.startsWith("New")) {
     const body = { ...timeEntry };
     delete body._id;
     delete body.formType;
     delete body.week;
     delete body.workOrderDesc;
-    //delete body.hours;
     return http.put(timeEntryUrl(timeEntry._id), body);
   } else {
     const body = { ...timeEntry };
@@ -48,6 +53,5 @@ export function saveTimeEntry(timeEntry) {
 }
 
 export function deleteTimeEntry(id) {
-  console.log(id)
   return http.delete(timeEntryUrl(id));
 }

@@ -13,7 +13,6 @@ import PageNotFound from './PageNotFound';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import auth from '../services/authService';
-// import TimeEntryForm from './TimeEntryForm';
 import ProtectedRoute from '../common/ProtectedRoute';
 
 function App() {
@@ -21,12 +20,10 @@ function App() {
   const [ user , setUser] = useState ("");
 
   useEffect(() => {
-
       const user1 = auth.getCurrentUser();
-      console.log("user1 ",user1 )
       var user = " ";
       if(user1 !== null){
-          user = user1.name;
+          user = user1;
       } 
       setUser(user); 
       console.log(user);
@@ -37,16 +34,17 @@ function App() {
       <ToastContainer />
       <Router>
           <div className="container">
-          <NavBar user = {user}/>
+          <NavBar user = {user.name}/>
           <Switch>
             <Route path="/Register" component={Register} />
             <Route path="/Login" component={Login} />
             <Route path="/Logout" component={Logout} />
+
             <ProtectedRoute path="/TimeEntries" 
             render = {(props)=>(
-              <TimeEntries {...props} user= {user} />
-            )} component={TimeEntries} />
-            {/* <ProtectedRoute path="/TimeEntryForm" component={TimeEntryForm} /> */}
+              <TimeEntries {...props} emailId = {user.id} />
+            )} />
+            
             <ProtectedRoute path="/WorkOrders" component={WorkOrders} />
             <Route path="/Controlers" component={Controlers} />
             <Route path="/PageNotFound" component={PageNotFound} />

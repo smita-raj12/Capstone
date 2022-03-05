@@ -27,7 +27,7 @@ class RegisterForm extends Form {
 
     doSubmit=async()=>{
         try{
-            const response=await userService.register(this.state.data)
+            const response = await userService.register(this.state.data)
             console.log(response)
             auth.loginWithJwt(response.headers['x-auth-token'])
             window.location='/'
