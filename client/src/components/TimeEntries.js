@@ -85,7 +85,7 @@ class TimeEntries extends Component {
             });
             prevWeekNumber = weekNumber;
             y = y +1;
-            //console.log(y)
+           
         }
     }
     this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray,CurrentEmailId})
@@ -94,11 +94,15 @@ class TimeEntries extends Component {
     
 
     handleSave =  async (timeEntry) => {
-        
+        console.log("handle save 1",timeEntry.formType);
         try {
+            console.log('xxxx')
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
-            if (timeEntry._id.startsWith("New")) {
+           
+            console.log("handle save 1",newTimeEntry.formType);
+            if (timeEntry.formType ==="New") {
                 const timeEntries = this.state.timeEntries;
+                console.log("handle save 2",timeEntry);
                 timeEntries.push({
                     _id: newTimeEntry._id,
                     date: timeEntry.date,
@@ -111,6 +115,7 @@ class TimeEntries extends Component {
         } catch (ex) {
             if (ex.response) console.log("ex.repsonse", ex.response);
         }
+        console.log("handle save 1",timeEntry.formType);
     };
     
     handleDelete = async (timeEntry) => {
@@ -169,16 +174,15 @@ class TimeEntries extends Component {
         
 
         var filtered = timeentriesWithinDateRange;
-        let groupByColumn = " ";
+        let groupByColumn = [];
         let groupByColumnValue = " ";
-        
-           
+        let i = 0;           
         if (selectedWorkOrder) {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
-            console.log("filtered",filtered)
+           
             if (!selectedDate && !selectedWeek) {
-                groupByColumn = "workOrder";
+                groupByColumn[i] = "workOrder";
                 groupByColumnValue = workOrders
                     .filter((o) => o._id === selectedWorkOrder)
                     .map((o) => o.name);
@@ -189,8 +193,9 @@ class TimeEntries extends Component {
             filtered = filtered.filter((m) => m.date === selectedDate);
         
             if (!selectedWorkOrder &&  !selectedWeek) {
-                groupByColumn = "date";
-                groupByColumnValue = selectedDate;
+                i = i+1
+                groupByColumn[i] = "date";
+                groupByColumnValue = groupByColumnValue + selectedDate;
                 console.log("groupByColumnValue",groupByColumnValue)
             }
         }
@@ -199,11 +204,12 @@ class TimeEntries extends Component {
             filtered = filtered.filter((m) => m.week === selectedWeek);
         
             if (!selectedWorkOrder  && !selectedDate) {
-                groupByColumn = "week";
-                groupByColumnValue = selectedWeek;
+                i=i+1
+                groupByColumn[i] = "week";
+                groupByColumnValue = groupByColumnValue + selectedWeek;
             }
         }
-    
+        console.log("groupByColumn", groupByColumn, groupByColumnValue)
         if (groupByColumn > " ") {
           _(filtered)
             .groupBy( groupByColumn )
@@ -308,7 +314,7 @@ class TimeEntries extends Component {
         }
 
         return (
-            <div>
+            <div style={{backgroundColor: "#eee"}}>
                 <div className="row">
                     <div className="col-1">
                         <button
@@ -355,7 +361,7 @@ class TimeEntries extends Component {
                 {data.map((item) => (
                     <li
                         key={item._id}
-                        className="list-inline-item list-group-item-info"
+                        className="list-inline-item m-2"
                         >         
                         <TimeEntryForm
                             timeEntry={item}

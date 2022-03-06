@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 function NavBar( {role }) {
     
   return (
-    <nav className="navbar navbar-expand-sm navbar-light bg-light">
+    <nav className="navbar navbar-expand-sm navbar-light bg-primary">
         {role}
         <button
             className="navbar-toggler"

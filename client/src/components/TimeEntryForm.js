@@ -133,8 +133,8 @@ class TimeEntryForm extends Form {
             <div>
                 {timeEntry.formType.startsWith("Summary") && (
                     
-                    <div className="row bg-info m-2">
-                        <div className="col-2">{timeEntry.groupByColumn}</div>
+                    <div className="row m-2" style={{backgroundColor: "rgb(84, 102, 150)"}}>
+                        <div className="col-2" >{timeEntry.groupByColumn}</div>
                         <div className="col-6 m-2">=====================Total=========</div>
                         <div className="col m-2">{timeEntry.hours}</div>
                     </div>
@@ -142,7 +142,7 @@ class TimeEntryForm extends Form {
 
                 {!timeEntry.formType.startsWith("Summary") && (  
                     <form onSubmit={this.handleSubmit}>
-                        <div className="row">
+                        <div className="row m-2" style={{backgroundColor: "#9cf"}}>
                         <div className="mr-2"></div>
 
                             <div className="col-1 m-1">

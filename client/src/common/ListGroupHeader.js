@@ -22,7 +22,7 @@ class ListGroupHeader extends Component {
 
     render() {
         return (
-            <div className="row bg-secondary text-white ml-4 " >
+            <div className="row bg-secondary text-white m-2 " >
                 {this.props.columns.map((column) => (
                 <div
                     className={this.getColumnClasses(column.width)}
