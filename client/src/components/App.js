@@ -26,7 +26,7 @@ function App() {
           user = user1;
       } 
       setUser(user); 
-      console.log(user);
+    
   },[]);
 
   return (
@@ -34,7 +34,7 @@ function App() {
       <ToastContainer />
       <Router>
           <div className="container">
-          <NavBar role = {user.role}/>
+          <NavBar user = {user}/>
           <Switch>
             <Route path="/Register" component={Register} />
             <Route path="/Login" component={Login} />

@@ -61,7 +61,7 @@ class Form extends Component {
       <button
         disabled={this.validate()}
         //onClick={() => this.props.onSave(this.state.data)}
-        className="btn btn-primary mt-3"
+        className="btn btn-dark mt-3"
       >
         {label}
       </button>

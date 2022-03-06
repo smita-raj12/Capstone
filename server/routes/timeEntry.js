@@ -15,7 +15,7 @@ router.get('/', (req, res)=> {
 });
 
 router.get("/email/:emailId", (req, res)=> {
-  const sqlGet = "SELECT _id, date(date), workOrderId, hours, emailId FROM timeentries WHERE emailId = ? ";
+  const sqlGet = "SELECT * FROM timeentries WHERE emailId = ? ";
   db.query(sqlGet,[req.params.emailId], (err, result)=>{
        if (err) return res.status(404).send("Read by email failed with Sql error.");
       
@@ -32,7 +32,8 @@ router.post("/", (req, res)=>{
   const sqlInsert = "INSERT INTO timeentries (date, workOrderId,hours,emailId) VALUES (?,?,?,?);"
   
   db.query(sqlInsert, [date, workOrderId, hours, emailId], (err, result)=>{
-  console.log(err);
+  if(err) return res.status(400).send(error.details[0].message)
+  return res.send(result)
   }); 
 });
 

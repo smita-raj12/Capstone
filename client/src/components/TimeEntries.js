@@ -32,6 +32,7 @@ class TimeEntries extends Component {
         const { data } = await getTimeEntryEmailId(this.props.emailId);
         var CurrentEmailId = this.props.emailId;
         // const { data } = await getTimeEntries()
+      
         
         const { data:maxData } = await getTimeEntryMaxId();    
         const maxId = maxData[0]["MAX(_id)"] +1;
@@ -41,11 +42,14 @@ class TimeEntries extends Component {
             _id : o._id,
             emailId : CurrentEmailId,
             week: moment(moment(o.date).format("YYYY-MM-DD")).week(),
-            date: moment(o.date).format("YYYY-MM-DD"),
+            date: moment(o.date).format('YYYY-MM-DD'),
+            
             workOrderId: o.workOrderId,
             hours: o.hours,
             formType: "data"
         }))
+
+       
 
         var dateArray = [];
         var weekArray = [];
@@ -96,13 +100,10 @@ class TimeEntries extends Component {
     handleSave =  async (timeEntry) => {
         console.log("handle save 1",timeEntry.formType);
         try {
-            console.log('xxxx')
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
-           
-            console.log("handle save 1",newTimeEntry.formType);
             if (timeEntry.formType ==="New") {
                 const timeEntries = this.state.timeEntries;
-                console.log("handle save 2",timeEntry);
+        
                 timeEntries.push({
                     _id: newTimeEntry._id,
                     date: timeEntry.date,
@@ -115,7 +116,7 @@ class TimeEntries extends Component {
         } catch (ex) {
             if (ex.response) console.log("ex.repsonse", ex.response);
         }
-        console.log("handle save 1",timeEntry.formType);
+        
     };
     
     handleDelete = async (timeEntry) => {
@@ -148,6 +149,7 @@ class TimeEntries extends Component {
                 CurrentEmailId
             } = this.state
 
+        
         const timeentriesWithinDateRange = allTimeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
@@ -171,17 +173,17 @@ class TimeEntries extends Component {
             })
         );
 
-        
-
         var filtered = timeentriesWithinDateRange;
         let groupByColumn = [];
         let groupByColumnValue = " ";
         let i = 0;           
+        groupByColumn[i]="date"
         if (selectedWorkOrder) {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
            
             if (!selectedDate && !selectedWeek) {
+                i = i+1
                 groupByColumn[i] = "workOrder";
                 groupByColumnValue = workOrders
                     .filter((o) => o._id === selectedWorkOrder)
@@ -209,8 +211,8 @@ class TimeEntries extends Component {
                 groupByColumnValue = groupByColumnValue + selectedWeek;
             }
         }
-        console.log("groupByColumn", groupByColumn, groupByColumnValue)
-        if (groupByColumn > " ") {
+        console.log("groupByColumn",i, groupByColumn, groupByColumnValue)
+        if (i !== 0) {
           _(filtered)
             .groupBy( groupByColumn )
             .map(( groupByColumn ) =>
@@ -225,7 +227,10 @@ class TimeEntries extends Component {
               })
             )
             .value();
+
+            _.groupBy(groupByColumn, "date")
         }else {
+            console.log("default group by")
           _(filtered)
           .groupBy("date")
           .map((date, id) =>
@@ -234,11 +239,13 @@ class TimeEntries extends Component {
                 date: id,
                 formType:"Summary",
                 week: moment(id, "YYYY-MM-DD").week(),
+                groupByColumn :id,
                 workOrder: "",
                 hours: _.sumBy(date, "hours"),
             })
         )
         .value();
+
         _.groupBy(filtered, "date")
         }
 

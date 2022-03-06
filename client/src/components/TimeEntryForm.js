@@ -131,7 +131,7 @@ class TimeEntryForm extends Form {
 
         return (
             <div>
-                {timeEntry.formType.startsWith("Summary") && (
+                {timeEntry.formType === "Summary" && (
                     
                     <div className="row m-2" style={{backgroundColor: "rgb(84, 102, 150)"}}>
                         <div className="col-2" >{timeEntry.groupByColumn}</div>
@@ -140,7 +140,7 @@ class TimeEntryForm extends Form {
                     </div>
                 )}
 
-                {!timeEntry.formType.startsWith("Summary") && (  
+                {timeEntry.formType !== "Summary"&& (  
                     <form onSubmit={this.handleSubmit}>
                         <div className="row m-2" style={{backgroundColor: "#9cf"}}>
                         <div className="mr-2"></div>
@@ -174,7 +174,7 @@ class TimeEntryForm extends Form {
                             <div className="col-1">
                             <button 
                                 onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType=== "Summary" || timeEntry.formType==="New"}
-                                className="btn-warn btn-sm mt-3">
+                                className="btn-danger btn-sm mt-3">
                                 Delete
                             </button>
                             </div>

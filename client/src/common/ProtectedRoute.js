@@ -8,10 +8,10 @@ function ProtectedRoute({path,component:Component,role,render,...rest}) {
 
     useEffect (()=>{
         var  currentUser = auth.getCurrentUser();
-        console.log(currentUser)
+        
         var User = currentUser
         setCurrentUser (User);
-        console.log("protected current user",User);
+       
     },[])
    
   return (
