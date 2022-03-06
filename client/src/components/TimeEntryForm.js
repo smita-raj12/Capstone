@@ -132,59 +132,54 @@ class TimeEntryForm extends Form {
         return (
             <div>
                 {timeEntry.formType.startsWith("Summary") && (
-                    <div className="row bg-info ">
-                        <div className="col-1 m-1">
-                             <div >{timeEntry.groupByColumn}</div>
-                        </div>
-                        <div className="col-1 m-1">
-                            <div >======Total==========+++++++++++++++++++++++++++++++===</div>
-                        </div>
-                        <div className="col-1 m-1">
-                        <div >{timeEntry.hours}</div>
-                        </div>
+                    
+                    <div className="row bg-info m-2">
+                        <div className="col-2">{timeEntry.groupByColumn}</div>
+                        <div className="col-6 m-2">=====================Total=========</div>
+                        <div className="col m-2">{timeEntry.hours}</div>
                     </div>
                 )}
 
                 {!timeEntry.formType.startsWith("Summary") && (  
-                <form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                    <div className="mr-2"></div>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="row">
+                        <div className="mr-2"></div>
 
-                        <div className="col-1 m-1">
-                            {this.renderInput("week", "Week")}
-                        </div>
+                            <div className="col-1 m-1">
+                                {this.renderInput("week", "Week")}
+                            </div>
 
-                        <div className="col-2">
-                            {this.renderInput("date", "Date", Date)}
-                        </div>
+                            <div className="col-2">
+                                {this.renderInput("date", "Date", Date)}
+                            </div>
 
-                        <div className="col-2">
-                            {this.renderSelect(
-                                "workOrderId",
-                                "WorkOrder",
-                                this.state.workOrders
-                            )}
-                        </div>
+                            <div className="col-2">
+                                {this.renderSelect(
+                                    "workOrderId",
+                                    "WorkOrder",
+                                    this.state.workOrders
+                                )}
+                            </div>
 
-                        <div className="col-3">
-                            {this.handleSelect(this.state.data.workOrderId)}
-                        </div>
+                            <div className="col-3">
+                                {this.handleSelect(this.state.data.workOrderId)}
+                            </div>
 
-                        <div className="col-1">
-                            {this.renderInput("hours", "Hours", Number)}
-                        </div>
+                            <div className="col-1">
+                                {this.renderInput("hours", "Hours", Number)}
+                            </div>
 
-                        <div className="col-1">{this.renderButton("Save")}</div>
-                        
-                        <div className="col-1">
-                        <button 
-                            onClick={() => this.props.onDelete(this.props.timeEntry)} 
-                            className="btn-warn btn-sm mt-3">
-                            Delete
-                        </button>
+                            <div className="col-1">{this.renderButton("Save")}</div>
+                            
+                            <div className="col-1">
+                            <button 
+                                onClick={() => this.props.onDelete(this.props.timeEntry)} 
+                                className="btn-warn btn-sm mt-3">
+                                Delete
+                            </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
                 )}   
             </div>
         );
