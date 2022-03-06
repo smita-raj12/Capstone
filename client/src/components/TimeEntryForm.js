@@ -173,7 +173,7 @@ class TimeEntryForm extends Form {
                             
                             <div className="col-1">
                             <button 
-                                onClick={() => this.props.onDelete(this.props.timeEntry)} 
+                                onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType=== "Summary" || timeEntry.formType==="New"}
                                 className="btn-warn btn-sm mt-3">
                                 Delete
                             </button>
