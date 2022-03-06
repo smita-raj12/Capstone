@@ -134,8 +134,8 @@ class TimeEntryForm extends Form {
                 {timeEntry.formType === "Summary" && (
                     
                     <div className="row m-2" style={{backgroundColor: "rgb(84, 102, 150)"}}>
-                        <div className="col-2" >{timeEntry.groupByColumn}</div>
-                        <div className="col-6 m-2">=====================Total=========</div>
+                        <div className="col-3" >{timeEntry.groupByColumn}</div>
+                        <div className="col-5 m-2">=====================Total=========</div>
                         <div className="col m-2">{timeEntry.hours}</div>
                     </div>
                 )}

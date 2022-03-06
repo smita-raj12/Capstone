@@ -182,42 +182,43 @@ class TimeEntries extends Component {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
            
-            if (!selectedDate && !selectedWeek) {
+            // if (!selectedDate && !selectedWeek) {
                 i = i+1
                 groupByColumn[i] = "workOrder";
                 groupByColumnValue = workOrders
                     .filter((o) => o._id === selectedWorkOrder)
-                    .map((o) => o.name);
-            }
+                    .map((o) => o.name).toString()    ;
+            // }
         }
     
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
         
-            if (!selectedWorkOrder &&  !selectedWeek) {
+            // if (!selectedWorkOrder &&  !selectedWeek) {
                 i = i+1
                 groupByColumn[i] = "date";
-                groupByColumnValue = groupByColumnValue + selectedDate;
+                groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
                 console.log("groupByColumnValue",groupByColumnValue)
-            }
+            // }
         }
     
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
         
-            if (!selectedWorkOrder  && !selectedDate) {
+            // if (!selectedWorkOrder  && !selectedDate) {
                 i=i+1
                 groupByColumn[i] = "week";
-                groupByColumnValue = groupByColumnValue + selectedWeek;
-            }
+                groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
+            // }
         }
-        console.log("groupByColumn",i, groupByColumn, groupByColumnValue)
+        console.log("groupByColumn", groupByColumnValue)
         if (i !== 0) {
           _(filtered)
             .groupBy( groupByColumn )
             .map(( groupByColumn ) =>
               filtered.push({
                 displayOrder: 1,
+                _id:groupByColumnValue,
                 date: " ",
                 week: " ",
                 formType:"Summary",
@@ -235,6 +236,7 @@ class TimeEntries extends Component {
           .groupBy("date")
           .map((date, id) =>
                 filtered.push({
+                _id:id,
                 displayOrder: 1,
                 date: id,
                 formType:"Summary",
@@ -307,6 +309,7 @@ class TimeEntries extends Component {
             weekArray
         } = this.state
         
+        console.log("time entry data",data)
         const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);

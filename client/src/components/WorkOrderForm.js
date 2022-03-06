@@ -46,7 +46,7 @@ class WorkOrderForm extends Form {
                     <div className="row">
                         <div className="mr-2"></div>
                         <div className="col-2 m-1">
-                            {this.renderInput("_id","ID", " " ,"readOnly")}
+                            {this.renderInput("_id","ID", "text" ,"readOnly")}
                         </div>
                         <div className="col-2 m-1">
                             {this.renderInput("name","Name")}
