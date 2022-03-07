@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import {getTimeEntryEmailId,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
+import {getTimeEntries,getTimeEntryEmailId,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
 import { toast } from "react-toastify";
 import { getWorkOrders} from '../services/WorkOrderService'
 import ListGroupHeader from '../common/ListGroupHeader';
@@ -31,7 +31,8 @@ class TimeEntries extends Component {
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntryEmailId(this.props.emailId);
         var CurrentEmailId = this.props.emailId;
-        // const { data } = await getTimeEntries()
+        const { data:masterTimeEntries } = await getTimeEntries()
+        console.log("masterTimeEntries",masterTimeEntries)
       
         
         const { data:maxData } = await getTimeEntryMaxId();    
@@ -42,8 +43,7 @@ class TimeEntries extends Component {
             _id : o._id,
             emailId : CurrentEmailId,
             week: moment(moment(o.date).format("YYYY-MM-DD")).week(),
-            date: moment(o.date).format('YYYY-MM-DD'),
-            
+            date: moment(o.date).format('YYYY-MM-DD'), 
             workOrderId: o.workOrderId,
             hours: o.hours,
             formType: "data"
@@ -57,15 +57,15 @@ class TimeEntries extends Component {
         let weekNumber = " ";
 
         var currentDate = moment(
-            moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
+            moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
         );
 
         var startDate = moment(
-            moment(moment(), "YYYY-MM-DD").subtract(10, "days").format("YYYY-MM-DD")
+            moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
         );
 
         var stopDate = moment(
-            moment(moment(), "YYYY-MM-DD").add(10, "days").format("YYYY-MM-DD")
+            moment(moment(), "YYYY-MM-DD").add(30, "days").format("YYYY-MM-DD")
         );
 
         var x = 0
@@ -98,7 +98,7 @@ class TimeEntries extends Component {
     
 
     handleSave =  async (timeEntry) => {
-        console.log("handle save 1",timeEntry.formType);
+       
         try {
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
             if (timeEntry.formType ==="New") {
@@ -154,11 +154,6 @@ class TimeEntries extends Component {
             moment(m.date).isSameOrAfter(startDate)
         );
         
-        // var timeentrieswithDisplayOrder = timeentriesWithinDateRange.map((o) => ({
-        //     displayOrder: 2,
-        //     week: moment(o.date, "YYYY-MM-DD").week(),
-        //     ...o,
-        // }));
 
         dateArray.map((o, id) =>
         timeentriesWithinDateRange.push({
@@ -178,40 +173,40 @@ class TimeEntries extends Component {
         let groupByColumnValue = " ";
         let i = 0;           
         groupByColumn[i]="date"
+
         if (selectedWorkOrder) {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
            
-            // if (!selectedDate && !selectedWeek) {
                 i = i+1
                 groupByColumn[i] = "workOrder";
                 groupByColumnValue = workOrders
                     .filter((o) => o._id === selectedWorkOrder)
                     .map((o) => o.name).toString()    ;
-            // }
+            
         }
     
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
         
-            // if (!selectedWorkOrder &&  !selectedWeek) {
+            
                 i = i+1
                 groupByColumn[i] = "date";
                 groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
                 console.log("groupByColumnValue",groupByColumnValue)
-            // }
+           
         }
     
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
         
-            // if (!selectedWorkOrder  && !selectedDate) {
+           
                 i=i+1
                 groupByColumn[i] = "week";
                 groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
-            // }
+            
         }
-        console.log("groupByColumn", groupByColumnValue)
+        
         if (i !== 0) {
           _(filtered)
             .groupBy( groupByColumn )
@@ -371,7 +366,7 @@ class TimeEntries extends Component {
                 {data.map((item) => (
                     <li
                         key={item._id}
-                        className="list-inline-item m-2"
+                        className="list-inline-item"
                         >         
                         <TimeEntryForm
                             timeEntry={item}

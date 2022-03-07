@@ -1,14 +1,17 @@
 const  {validate}  = require("../models/timeEntry");
 const db = require ("../startup/db");
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 
 
 const express = require("express");
 const router = express.Router();
 
-router.get('/', (req, res)=> {
-  
+router.get('/',[auth,admin], (req, res)=> {
+  //console.log("timeentryAuth");
   const sqlGet = "SELECT _id, date(date), workOrderId, hours FROM timeentries";
   db.query(sqlGet, (err, result)=>{
+      if(err)  res.send("error fetching time entries")
       res.send(result);
   })
   
@@ -24,7 +27,7 @@ router.get("/email/:emailId", (req, res)=> {
   })
 })
 
-router.post("/", (req, res)=>{
+router.post("/",[auth], (req, res)=>{
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const {date,workOrderId , hours, emailId} = req.body
@@ -37,7 +40,7 @@ router.post("/", (req, res)=>{
   }); 
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",[auth], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -56,7 +59,7 @@ router.put("/:id", async (req, res) => {
   
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",[auth], async (req, res) => {
     //const id = req.body._id
     const timeEntryDelete = "DELETE FROM timeentries WHERE _id = ?";
     db.query(timeEntryDelete, [req.params.id], (err, result)=>{

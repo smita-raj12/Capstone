@@ -107,7 +107,7 @@ class TimeEntryForm extends Form {
             if (input.name === "workOrderId") {
                 if (
                     timeEntriesforthedate[i].date === date &&
-                    timeEntriesforthedate[i].workOrder._id === input.value
+                    timeEntriesforthedate[i].workOrderId === input.value
                 ) {
                     return (customError = "Duplicate work order ");
                 }
@@ -146,11 +146,11 @@ class TimeEntryForm extends Form {
                         <div className="mr-2"></div>
 
                             <div className="col-1 m-1">
-                                {this.renderInput("week", "Week")}
+                                {this.renderInput("week", "Week","text" ,"readOnly")}
                             </div>
 
                             <div className="col-2">
-                                {this.renderInput("date", "Date", Date)}
+                                {this.renderInput("date", "Date","text" ,"readOnly")}
                             </div>
 
                             <div className="col-2">
@@ -166,14 +166,14 @@ class TimeEntryForm extends Form {
                             </div>
 
                             <div className="col-1">
-                                {this.renderInput("hours", "Hours", Number)}
+                                {this.renderInput("hours", "Hours")}
                             </div>
 
                             <div className="col-1">{this.renderButton("Save")}</div>
                             
                             <div className="col-1">
                             <button 
-                                onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType=== "Summary" || timeEntry.formType==="New"}
+                                onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType ==="New"}
                                 className="btn-danger btn-sm mt-3">
                                 Delete
                             </button>

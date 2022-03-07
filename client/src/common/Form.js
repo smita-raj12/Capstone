@@ -19,11 +19,14 @@ class Form extends Component {
     const data = { ...this.state.data };
     data[input.name] = input.value;
     this.setState({ data, errors });
+    // console.log("errors",errors)
 
-    const customError = this.customValidation(input);
-
-    if (customError) errors[input.name] = customError;
-    else delete errors[input.name];
+    if (!errors)
+     { const customError = this.customValidation(input);
+      if (customError) errors[input.name] = customError;
+      else delete errors[input.name];
+     }
+    
 
     this.setState({ data, errors });
   };
@@ -53,6 +56,7 @@ class Form extends Component {
     const obj = { [name]: value };
     const schema = { [name]: this.schema[name] };
     const { error } = Joi.validate(obj, schema);
+    // if (error) console.log("error.details[0].message",error.details[0].message)
     return error ? error.details[0].message : null;
   };
 
