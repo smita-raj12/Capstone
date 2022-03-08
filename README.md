@@ -80,6 +80,12 @@ Run `npm install` in the git BASH terminal to install dependencies.
 * searching for navbar [https://www.youtube.com/watch?v=nLTMn19vupw&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=8](https://www.youtube.com/watch?v=nLTMn19vupw&list=RDCMUC8S4rDRZn6Z_StJ-hh7ph8g&index=8)
 
 * searching for icons [https://mui.com/components/material-icons/?query=close](https://mui.com/components/material-icons/?query=close)
+
+#### mon, 3/7/2022
+
+* watching sorting and pagination lessons on `codewithmosh.com` website tutorials.
+
+
 ## Known bugs
 
 If any bugs arrives should go here 
