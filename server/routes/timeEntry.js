@@ -7,16 +7,10 @@ const admin = require("../middleware/admin");
 const express = require("express");
 const router = express.Router();
 
-router.get('/', [auth, admin], (req, res)=> {
-  const sqlGet = "SELECT _id, date(date), workOrderId, hours FROM timeentries";
-  db.query(sqlGet, (err, result)=>{
-      if(err)  res.send("error fetching time entries")
-      res.send(result);
-  })
-  
-});
 
-router.get("/email/:emailId", (req, res)=> {
+
+router.get("/email/:emailId",[auth], (req, res)=> {
+  console.log("test1")
   const sqlGet = "SELECT * FROM timeentries WHERE emailId = ? ";
   db.query(sqlGet,[req.params.emailId], (err, result)=>{
       if (err) return res.status(404).send("Read by email failed with Sql error.");
@@ -25,6 +19,16 @@ router.get("/email/:emailId", (req, res)=> {
       res.send(result);
   })
 })
+
+router.get('/',[auth,admin], (req, res)=> {
+  
+  const sqlGet = "SELECT _id, date(date), workOrderId, hours FROM timeentries";
+  db.query(sqlGet, (err, result)=>{
+      if(err)  res.send("error fetching time entries")
+      res.send(result);
+  })
+  
+});
 
 router.post("/",[auth], (req, res)=>{
   const { error } = validate(req.body);

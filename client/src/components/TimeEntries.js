@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import TimeEntryForm from './TimeEntryForm';
 import moment from 'moment';
-import {getTimeEntries,getTimeEntryEmailId,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
+import {getTimeEntryEmailId,  saveTimeEntry, deleteTimeEntry, getTimeEntryMaxId }  from '../services/TimeEntriesService'
 import { toast } from "react-toastify";
 import { getWorkOrders} from '../services/WorkOrderService'
 import ListGroupHeader from '../common/ListGroupHeader';
@@ -31,8 +31,7 @@ class TimeEntries extends Component {
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntryEmailId(this.props.emailId);
         var CurrentEmailId = this.props.emailId;
-        const { data:masterTimeEntries } = await getTimeEntries()
-        console.log("masterTimeEntries",masterTimeEntries)
+        
       
         
         const { data:maxData } = await getTimeEntryMaxId();    
@@ -258,7 +257,7 @@ class TimeEntries extends Component {
         {path:"week", label: "Week", width: "1"},
         { path: "date",label: "Date",width: "2"},
         { path: "workOrder.name", label: "Work Order Number", width: "2" },
-        { path: "workOrder.description", label: "Work Order Description", width: "3" },
+        { path: "workOrder.description", label: "Work Order Description", width: "4" },
         { path: "hours", label: "Hours", width: 1 },
     ];
 

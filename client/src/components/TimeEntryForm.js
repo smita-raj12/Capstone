@@ -135,7 +135,7 @@ class TimeEntryForm extends Form {
                     
                     <div className="row m-2" style={{backgroundColor: "rgb(84, 102, 150)"}}>
                         <div className="col-3" >{timeEntry.groupByColumn}</div>
-                        <div className="col-5 m-2">=====================Total=========</div>
+                        <div className="col-6 m-2">=====================Total=========</div>
                         <div className="col m-2">{timeEntry.hours}</div>
                     </div>
                 )}
@@ -161,7 +161,7 @@ class TimeEntryForm extends Form {
                                 )}
                             </div>
 
-                            <div className="col-3">
+                            <div className="col-4">
                                 {this.handleSelect(this.state.data.workOrderId)}
                             </div>
 
@@ -169,9 +169,9 @@ class TimeEntryForm extends Form {
                                 {this.renderInput("hours", "Hours")}
                             </div>
 
-                            <div className="col-1">{this.renderButton("Save")}</div>
+                            <div className="col">{this.renderButton("Save")}</div>
                             
-                            <div className="col-1">
+                            <div className="col">
                             <button 
                                 onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType ==="New"}
                                 className="btn-danger btn-sm mt-3">
