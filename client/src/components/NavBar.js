@@ -33,15 +33,15 @@ function NavBar( { user }) {
                     <NavLink className="nav-link" to="/TimeEntries">
                         TimeEntries
                     </NavLink>
-                    <NavLink className="nav-link" to="/WorkOrders">
-                        WorkOrders
-                    </NavLink>
                 </React.Fragment>
             )}
             {user.role === "MANAGER" && ( 
                 <React.Fragment>       
                     <NavLink className="nav-link" to="/Controlers">
                         Controlers
+                    </NavLink>
+                    <NavLink className="nav-link" to="/WorkOrders">
+                        WorkOrders
                     </NavLink>
                 </React.Fragment>    
             )}
