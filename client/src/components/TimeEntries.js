@@ -48,8 +48,6 @@ class TimeEntries extends Component {
             formType: "data"
         }))
 
-       
-
         var dateArray = [];
         var weekArray = [];
         let prevWeekNumber = [];
@@ -88,7 +86,6 @@ class TimeEntries extends Component {
             });
             prevWeekNumber = weekNumber;
             y = y +1;
-           
         }
     }
     this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray,CurrentEmailId})
@@ -176,34 +173,26 @@ class TimeEntries extends Component {
         if (selectedWorkOrder) {
             
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
-           
-                i = i+1
-                groupByColumn[i] = "workOrder";
-                groupByColumnValue = workOrders
-                    .filter((o) => o._id === selectedWorkOrder)
-                    .map((o) => o.name).toString()    ;
-            
+            i = i+1
+            groupByColumn[i] = "workOrder";
+            groupByColumnValue = workOrders
+                .filter((o) => o._id === selectedWorkOrder)
+                .map((o) => o.name).toString();
         }
     
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
-        
-            
-                i = i+1
-                groupByColumn[i] = "date";
-                groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
-                console.log("groupByColumnValue",groupByColumnValue)
-           
+            i = i+1
+            groupByColumn[i] = "date";
+            groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
+            console.log("groupByColumnValue",groupByColumnValue)
         }
     
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
-        
-           
-                i=i+1
-                groupByColumn[i] = "week";
-                groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
-            
+            i=i+1
+            groupByColumn[i] = "week";
+            groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
         }
         
         if (i !== 0) {
