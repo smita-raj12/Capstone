@@ -16,6 +16,7 @@ function timeEntryUrlMaxId() {
 }
 
 export function getTimeEntries() {
+  console.log("time entry services");
     return http.get(apiEndpoint);
 }
 

@@ -8,6 +8,7 @@ import ListGroupHeader from '../common/ListGroupHeader';
 import _ from "lodash";
 import SelectBox from './SelectBox';
 
+
 class TimeEntries extends Component {
 
     state = {
@@ -31,8 +32,6 @@ class TimeEntries extends Component {
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntryEmailId(this.props.emailId);
         var CurrentEmailId = this.props.emailId;
-        
-      
         
         const { data:maxData } = await getTimeEntryMaxId();    
         const maxId = maxData[0]["MAX(_id)"] +1;
@@ -348,19 +347,20 @@ class TimeEntries extends Component {
                     sortColumn={sortColumn}
                     onSort={this.handleSort}
                 />
-
+               
                 <ul className="list-group">
                     {data.map((item) => (
                         <li
                             key={item._id}
                             className="list-inline-item"
-                            >         
+                            > 
                             <TimeEntryForm
                                 timeEntry={item}
                                 timeEntries={data}
                                 onDelete={this.handleDelete}
                                 onSave={this.handleSave}
                             />
+                   
                         </li>
                             
                     ))}

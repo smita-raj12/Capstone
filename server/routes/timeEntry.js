@@ -17,7 +17,8 @@ router.get("/email/:emailId",[auth], (req, res)=> {
 })
 
 router.get('/',[auth,admin], (req, res)=> {
-  const sqlGet = "SELECT _id, date(date), workOrderId, hours FROM timeentries";
+  console.log("server time entries")
+  const sqlGet = "SELECT a.*, b.name,  b.description, c.name AS userName FROM timeentries a, workorders b, users c WHERE a.workOrderId = b._id AND a.emailId = c.id";
   db.query(sqlGet, (err, result)=>{
     if(err)  res.send("error fetching time entries")
       res.send(result);
