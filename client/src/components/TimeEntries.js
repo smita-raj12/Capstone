@@ -360,25 +360,22 @@ class TimeEntries extends Component {
                     onSort={this.handleSort}
                 />
 
-                <div> 
                 <ul className="list-group">
-                {data.map((item) => (
-                    <li
-                        key={item._id}
-                        className="list-inline-item"
-                        >         
-                        <TimeEntryForm
-                            timeEntry={item}
-                            timeEntries={data}
-                            onDelete={this.handleDelete}
-                            onSave={this.handleSave}
-                        />
+                    {data.map((item) => (
+                        <li
+                            key={item._id}
+                            className="list-inline-item"
+                            >         
+                            <TimeEntryForm
+                                timeEntry={item}
+                                timeEntries={data}
+                                onDelete={this.handleDelete}
+                                onSave={this.handleSave}
+                            />
                         </li>
-                        
-                ))}
-                    </ul>
-                </div>
-                
+                            
+                    ))}
+                </ul>
             </div>
         )
     }

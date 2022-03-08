@@ -43,9 +43,9 @@ class WorkOrderForm extends Form {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <div className="mr-2"></div>
-                        <div className="col-2 m-1">
+                    <div className="row m-2" style={{backgroundColor: "#9cf"}}>
+                        <div className="mr-4"></div>
+                        <div className="col-2 m-2">
                             {this.renderInput("_id","ID","text" ,"readOnly")}
                         </div>
                         <div className="col-2 m-1">
@@ -60,7 +60,7 @@ class WorkOrderForm extends Form {
                         <div className="col-1">
                             <button 
                                 onClick={() => this.props.onDelete(this.props.workOrder)} 
-                                className="btn-warn btn-sm mt-3">
+                                className="btn-danger btn-sm mt-3">
                                 Delete
                             </button>
                         </div>
