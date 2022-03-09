@@ -43,14 +43,11 @@ export default class Controlers extends Component {
         this.setState({ sortColumn });
     };
 
-
-      
-
-  render() {
+    render() {
     const { timeEntries , sortColumn } = this.state;
     console.log(timeEntries)
     return (
-      <div>
+        <div style={{backgroundColor: "#eee"}}>
         <Table
           columns={this.columns}
           data={timeEntries }

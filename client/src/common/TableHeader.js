@@ -19,6 +19,7 @@ class TableHeader extends Component {
         if (sortColumn.order ==='asc' ) return <i className="fa fa-sort-asc"/>;
         return <i className="fa fa-sort-desc"></i>
     }
+    
     render() { 
         return (
             <thead>
