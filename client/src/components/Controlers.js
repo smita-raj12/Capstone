@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
 
-export default class Controlers extends Component {
+class Controlers extends Component {
     state = {
         data: { date: "" },
         errors: {},
@@ -42,7 +42,7 @@ export default class Controlers extends Component {
             hours: o.hours,
             formType: "data"
         }))
-        
+
         this.setState({timeEntries, workOrders })
       } 
 
@@ -59,20 +59,52 @@ export default class Controlers extends Component {
     };
 
     handleWorkOrderSelect = (workOrder) => {
+
         this.setState({
             selectedWorkOrder: parseInt(workOrder),
             
         });
     };
 
+    getPageData(){
+
+        const { timeEntries: allTimeEntries,
+                selectedWorkOrder,
+                workOrders
+            } = this.state
+            
+        
+        var filtered = allTimeEntries;
+        let groupByColumn = [];
+        let groupByColumnValue = " ";
+        let i = 0;           
+       
+        if (selectedWorkOrder) {
+            console.log(filtered)
+            filtered = allTimeEntries.filter((m) => m.workOrderId === selectedWorkOrder);
+            i = i+1
+            groupByColumn[i] = "workOrder";
+            groupByColumnValue = workOrders
+                .filter((o) => o._id === selectedWorkOrder)
+                .map((o) => o.name).toString();
+        }
+        return {data:filtered}
+    } 
+
     render() {
-    const { timeEntries , sortColumn, workOrders, selectedWorkOrder} = this.state;
+       
+        const  {data}  = this.getPageData();
+        console.log(data)
+    const { 
+        sortColumn,  
+        workOrders, 
+        selectedWorkOrder} = this.state;
    
     let selectedWorkOrder1 = " ";
     if (selectedWorkOrder){
         selectedWorkOrder1 = selectedWorkOrder;
     }
-
+   
     return (
         <div style={{backgroundColor: "#eee"}}>
         <div className="row">
@@ -95,7 +127,7 @@ export default class Controlers extends Component {
         </div>            
           <Table
           columns={this.columns}
-          data={timeEntries }
+          data={data }
           sortColumn={sortColumn}
           onSort={this.handleSort}
          
@@ -106,3 +138,4 @@ export default class Controlers extends Component {
   }
 }
 
+export default Controlers;
