@@ -7,16 +7,19 @@ import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
 
 class Controlers extends Component {
+
     state = {
         data: { date: "" },
         errors: {},
         timeEntries:[],
         workOrders: [],
+        dateArray: [],
+        startDate: "2021-01-01",
         sortColumn: { path: "title", order: "Desc" },
         selectedWorkOrder: null,
         selectedDate: null,
         selectedWeek:null
-      };
+    };
 
       columns = [
         { path: "date", label: "Date" },
@@ -42,11 +45,36 @@ class Controlers extends Component {
             hours: o.hours,
             formType: "data"
         }))
+        
+        var dateArray = [];
 
-        this.setState({timeEntries, workOrders })
-      } 
+        var currentDate = moment(
+            moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
+        );
 
-      handleSort = (sortColumn) => {
+        var startDate = moment(
+            moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
+        );
+
+        var stopDate = moment(
+            moment(moment(), "YYYY-MM-DD").add(30, "days").format("YYYY-MM-DD")
+        );
+
+        var x = 0
+        
+        while (currentDate <= stopDate) {
+
+            dateArray.push({
+                _id: x,
+                name: moment(currentDate).format("YYYY-MM-DD"),
+            });
+            currentDate = moment(currentDate).add(1, "days");
+            x = x + 1;
+        }    
+        this.setState({timeEntries, workOrders, dateArray, startDate })
+    } 
+
+    handleSort = (sortColumn) => {
         console.log("sortColumn", sortColumn);
         this.setState({ sortColumn });
     };
@@ -62,31 +90,62 @@ class Controlers extends Component {
 
         this.setState({
             selectedWorkOrder: parseInt(workOrder),
-            
         });
+    };
+    
+    handleDateSelect = (date) => {
+        const { dateArray } = this.state;
+        const selectedDate = dateArray[date].name;
+        this.setState({ selectedDate });
     };
 
     getPageData(){
 
-        const { timeEntries: allTimeEntries,
+        const { timeEntries,
                 selectedWorkOrder,
-                workOrders
+                workOrders,
+                startDate,
+                dateArray,
+                selectedDate
             } = this.state
             
+            const timeentriesWithinDateRange = timeEntries.filter((m) =>
+            moment(m.date).isSameOrAfter(startDate)
+        );
         
-        var filtered = allTimeEntries;
+
+        dateArray.map((o, id) =>
+        timeentriesWithinDateRange.push({
+                displayOrder:1,
+                date: o.name,
+                _id: o.id,
+                week: moment(o.name, "YYYY-MM-DD").week(),
+                workOrder: 0,
+                hours: 0,
+        })
+        );
+
+        var filtered = timeentriesWithinDateRange;
         let groupByColumn = [];
         let groupByColumnValue = " ";
         let i = 0;           
-       
+        groupByColumn[i]="date"
+
         if (selectedWorkOrder) {
             console.log(filtered)
-            filtered = allTimeEntries.filter((m) => m.workOrderId === selectedWorkOrder);
+            filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
             i = i+1
             groupByColumn[i] = "workOrder";
             groupByColumnValue = workOrders
                 .filter((o) => o._id === selectedWorkOrder)
                 .map((o) => o.name).toString();
+        }
+        if (selectedDate) {
+            filtered = filtered.filter((m) => m.date === selectedDate);
+            i = i+1
+            groupByColumn[i] = "date";
+            groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
+            console.log("groupByColumnValue",groupByColumnValue)
         }
         return {data:filtered}
     } 
@@ -98,13 +157,17 @@ class Controlers extends Component {
     const { 
         sortColumn,  
         workOrders, 
-        selectedWorkOrder} = this.state;
+        selectedWorkOrder,
+        selectedDate,
+        dateArray} = this.state;
    
     let selectedWorkOrder1 = " ";
     if (selectedWorkOrder){
         selectedWorkOrder1 = selectedWorkOrder;
     }
-   
+    const dateId = dateArray
+            .filter((o) => o.name === selectedDate)
+            .map((o) => o._id);
     return (
         <div style={{backgroundColor: "#eee"}}>
         <div className="row">
@@ -124,13 +187,20 @@ class Controlers extends Component {
                 onChange={this.handleWorkOrderSelect}
                 />
             </div>
+            <div className="col-2">
+                <SelectBox
+                name="Date"
+                options={dateArray}
+                value={dateId}
+                onChange={this.handleDateSelect}
+                />
+            </div>
         </div>            
-          <Table
-          columns={this.columns}
-          data={data }
-          sortColumn={sortColumn}
-          onSort={this.handleSort}
-         
+        <Table
+        columns={this.columns}
+        data={data }
+        sortColumn={sortColumn}
+        onSort={this.handleSort}
         />
         
       </div>
