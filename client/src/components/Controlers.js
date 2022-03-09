@@ -195,7 +195,8 @@ class Controlers extends Component {
                 onChange={this.handleDateSelect}
                 />
             </div>
-        </div>            
+        </div>  
+        <h4 style={{textAlign: "center", color:"red", paddingTop:"30px"}}>Showing data in the database table.</h4>          
         <Table
         columns={this.columns}
         data={data }
