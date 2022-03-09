@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Table from "../common/Table";
 import moment from 'moment';
 import { getTimeEntries } from "../services/TimeEntriesService";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Controlers extends Component {
     state = {
@@ -48,12 +49,15 @@ export default class Controlers extends Component {
     console.log(timeEntries)
     return (
         <div style={{backgroundColor: "#eee"}}>
-        <Table
+          <Table
+          
           columns={this.columns}
           data={timeEntries }
           sortColumn={sortColumn}
           onSort={this.handleSort}
+         
         />
+        
       </div>
     );
   }
