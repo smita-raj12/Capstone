@@ -61,16 +61,7 @@ class WorkOrders extends Component {
             this.setState({ workOrders: origionalworkOrders });
         }
   }
-  // getPageData(){
-  //   const { workOrders: allWorkOrders, newWorkOrders } = this.state
-  //   const workOrdersWithNew = allWorkOrders.filter((m) =>
-  //           m._id < _id);
-  //           newWorkOrders.map((o) =>{
-  //             workOrdersWithNew.push({
-
-  //             })
-  //           })
-  // } 
+ 
   render(){
     const {workOrders} = this.state
     
