@@ -2,7 +2,6 @@ import React from 'react';
 import Joi from 'joi-browser'
 import Form from '../common/Form';
 import auth from '../services/authService';
-//import { Redirect } from 'react-router-dom';
 
 class LoginForm extends Form {
     
@@ -10,12 +9,14 @@ class LoginForm extends Form {
         data :{username:'' ,password:''},
         errors:{}
     }
+
     schema ={
         username : Joi.string().required().label("Username"),
         password : Joi.string().required().label("Password")
     }
 
-    doSubmit=async ()=>{
+    doSubmit = async() => {
+        
         try{
             const {username:email,password} = this.state.data
             await auth.login(email,password)
@@ -29,21 +30,22 @@ class LoginForm extends Form {
             }
         }
     }
+
     customValidation = (input) => {
     }
+
     render() { 
 
-        //if (auth.getCurrentUser()) return <Redirect to='/'/>
-
         return (
-        <div>
-            <h1>Login</h1> 
-            <form onSubmit={this.handleSubmit}>
-            {this.renderInput("username","Username")}
-            {this.renderInput("password","Password","password")}
-            {this.renderButton("Login")} 
-            </form>
-        </div> );
+            <div>
+                <h1>Login</h1> 
+                <form onSubmit={this.handleSubmit}>
+                {this.renderInput("username","Username")}
+                {this.renderInput("password","Password","password")}
+                {this.renderButton("Login")} 
+                </form>
+            </div> 
+        );
     }
 }
  

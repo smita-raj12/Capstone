@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/email/:emailId",[auth], (req, res)=> {
   console.log("test1")
-  const sqlGet = "SELECT * FROM timeentries WHERE emailId = ? ";
+  const sqlGet = "SELECT a.*, b.name AS workOrderName,  b.description As workOrderDesc, c.name AS userName FROM timeentries a, workorders b, users c WHERE a.workOrderId = b._id AND a.emailId = c.id AND emailId = ? ";
   db.query(sqlGet,[req.params.emailId], (err, result)=>{
       if (err) return res.status(404).send("Read by email failed with Sql error.");
       

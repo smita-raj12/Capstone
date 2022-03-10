@@ -33,7 +33,7 @@ function App() {
     <React.Fragment>
       <ToastContainer />
       <Router>
-          <div className="container">
+          <div className="container" style={{backgroundColor: "#eee"}}>
             <NavBar user = {user}/>
             <Switch>
               <Route path="/Register" component={Register} />

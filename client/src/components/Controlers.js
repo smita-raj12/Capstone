@@ -5,7 +5,7 @@ import { getTimeEntries } from "../services/TimeEntriesService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
-
+import SearchIcon from '@material-ui/icons/Search';
 
 class Controlers extends Component {
 
@@ -90,7 +90,6 @@ class Controlers extends Component {
     } 
 
     handleSort = (sortColumn) => {
-        console.log("sortColumn", sortColumn);
         this.setState({ sortColumn });
     };
 
@@ -134,107 +133,97 @@ class Controlers extends Component {
         );
         
         var filtered = timeentriesWithinDateRange;
-        let groupByColumnValue = " ";
-        let i = 0;           
-       
+
         if (selectedWorkOrder) {
-            
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
-            i = i+1
-            
-            groupByColumnValue = workOrders
+                        
+            workOrders
                 .filter((o) => o._id === selectedWorkOrder)
                 .map((o) => o.name).toString();
         }
+
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
-            i = i+1
-           
-            groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
-            
         }
+
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
-            i=i+1
-          
-            groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
         }
+
         return {data:filtered}
     } 
 
     render() {
         const  {data}  = this.getPageData();
         
-    const { 
-        sortColumn,  
-        workOrders, 
-        selectedWorkOrder,
-        selectedDate,
-        dateArray,
-        weekArray,
-        selectedWeek} = this.state;
-   
-    let selectedWorkOrder1 = " ";
-    if (selectedWorkOrder){
-        selectedWorkOrder1 = selectedWorkOrder;
-    }
+        const { 
+            sortColumn,  
+            workOrders, 
+            selectedWorkOrder,
+            selectedDate,
+            dateArray,
+            weekArray,
+            selectedWeek} = this.state;
+    
+        let selectedWorkOrder1 = " ";
+        if (selectedWorkOrder){
+            selectedWorkOrder1 = selectedWorkOrder;
+        }
 
-            const dateId = dateArray
+        const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);
     
-            const weekId = weekArray
+        const weekId = weekArray
             .filter((o) => o.name === selectedWeek)
             .map((o) => o._id);      
 
-    return (
-        <div style={{backgroundColor: "#eee"}}>
-        <div className="row">
-            <div className="col-1">
-                <button
-                    onClick={this.handleReset}
-                    className="btn-danger btn-sm mt-3"
-                >
-                Reset
-                </button>
-            </div>
-            <div className="col-2">
-                <SelectBox
-                name="WorkOrderId"
-                options={workOrders}
-                value={selectedWorkOrder1}
-                onChange={this.handleWorkOrderSelect}
-                
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-1">
+                        <button
+                            onClick={this.handleReset}
+                            className="btn-danger btn-sm mt-3"
+                        >
+                        Reset
+                        </button>
+                    </div>
+                    <div className="col-2">
+                        <SelectBox
+                            name="WorkOrderId"
+                            options={workOrders}
+                            value={selectedWorkOrder1}
+                            onChange={this.handleWorkOrderSelect}
+                        ><div><SearchIcon /></div></SelectBox>
+                    </div>
+                    <div className="col-2">
+                        <SelectBox
+                            name="Date"
+                            options={dateArray}
+                            value={dateId}
+                            onChange={this.handleDateSelect}
+                        />
+                    </div>
+                    <div className="col-1">
+                        <SelectBox
+                            name="Week"
+                            options={weekArray}
+                            value={weekId}
+                            onChange={this.handleWeekSelect}
+                        />
+                    </div>
+                </div>  
+                <h4 style={{textAlign: "center", color:"red", paddingTop:"30px"}}>Showing data in the database table.</h4>          
+                <Table
+                    columns={this.columns}
+                    data={data }
+                    sortColumn={sortColumn}
+                    onSort={this.handleSort}
                 />
             </div>
-            <div className="col-2">
-                <SelectBox
-                name="Date"
-                options={dateArray}
-                value={dateId}
-                onChange={this.handleDateSelect}
-                />
-            </div>
-            <div className="col-1">
-                <SelectBox
-                name="Week"
-                options={weekArray}
-                value={weekId}
-                onChange={this.handleWeekSelect}
-                />
-            </div>
-        </div>  
-        <h4 style={{textAlign: "center", color:"red", paddingTop:"30px"}}>Showing data in the database table.</h4>          
-        <Table
-        columns={this.columns}
-        data={data }
-        sortColumn={sortColumn}
-        onSort={this.handleSort}
-        />
-        
-      </div>
-    );
-  }
+        );
+    }
 }
 
 export default Controlers;

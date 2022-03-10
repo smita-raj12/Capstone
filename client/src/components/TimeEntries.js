@@ -25,8 +25,6 @@ class TimeEntries extends Component {
         CurrentEmailId:0
     };
     
-    
-    
     async componentDidMount() {
         
         const  { data: workOrders }  =  await getWorkOrders();
@@ -35,14 +33,15 @@ class TimeEntries extends Component {
         
         const { data:maxData } = await getTimeEntryMaxId();    
         const maxId = maxData[0]["MAX(_id)"] +1;
-        
-        
+                
         const timeEntries = data.map(o=>({
             _id : o._id,
             emailId : CurrentEmailId,
             week: moment(moment(o.date).format("YYYY-MM-DD")).week(),
             date: moment(o.date).format('YYYY-MM-DD'), 
             workOrderId: o.workOrderId,
+            workOrderName:o.workOrderName,
+            workOrderDesc:o.workOrderDesc,
             hours: o.hours,
             formType: "data"
         }))
@@ -77,23 +76,21 @@ class TimeEntries extends Component {
             x = x + 1;
             
             weekNumber = moment(currentDate, "YYYY-MM-DD").week();
-     
-            if (weekNumber !== prevWeekNumber) {
-            weekArray.push({
-                _id: y,
-                name: weekNumber,
-            });
-            prevWeekNumber = weekNumber;
-            y = y +1;
-        }
-    }
-    this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray,CurrentEmailId})
-    }
-    
-    
 
+            if (weekNumber !== prevWeekNumber) {
+                weekArray.push({
+                    _id: y,
+                    name: weekNumber,
+                });
+                prevWeekNumber = weekNumber;
+                y = y +1;
+            }
+        }
+        this.setState({timeEntries, workOrders,dateArray, maxId, startDate, weekArray,CurrentEmailId})
+    }
+        
     handleSave =  async (timeEntry) => {
-       
+
         try {
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
             if (timeEntry.formType ==="New") {
@@ -170,7 +167,6 @@ class TimeEntries extends Component {
         groupByColumn[i]="date"
 
         if (selectedWorkOrder) {
-            
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
             i = i+1
             groupByColumn[i] = "workOrder";
@@ -184,7 +180,6 @@ class TimeEntries extends Component {
             i = i+1
             groupByColumn[i] = "date";
             groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
-            console.log("groupByColumnValue",groupByColumnValue)
         }
     
         if (selectedWeek) {
@@ -195,41 +190,37 @@ class TimeEntries extends Component {
         }
         
         if (i !== 0) {
-          _(filtered)
-            .groupBy( groupByColumn )
-            .map(( groupByColumn ) =>
-              filtered.push({
-                displayOrder: 1,
-                _id:groupByColumnValue,
-                date: " ",
-                week: " ",
-                formType:"Summary",
-                groupByColumn:groupByColumnValue,
-                workOrder: " ",
-                hours: _.sumBy( groupByColumn , "hours"),
-              })
-            )
-            .value();
+            _(filtered)
+                .groupBy( groupByColumn )
+                .map(( groupByColumn ) =>
+                    filtered.push({
+                        displayOrder: 1,
+                        _id:groupByColumnValue,
+                        date: " ",
+                        week: " ",
+                        formType:"Summary",
+                        groupByColumn:groupByColumnValue,
+                        workOrder: " ",
+                        hours: _.sumBy( groupByColumn , "hours"),
+                    })
+                ).value();
 
             _.groupBy(groupByColumn, "date")
         }else {
-            console.log("default group by")
-          _(filtered)
-          .groupBy("date")
-          .map((date, id) =>
-                filtered.push({
-                _id:id,
-                displayOrder: 1,
-                date: id,
-                formType:"Summary",
-                week: moment(id, "YYYY-MM-DD").week(),
-                groupByColumn :id,
-                workOrder: "",
-                hours: _.sumBy(date, "hours"),
-            })
-        )
-        .value();
-
+            _(filtered)
+            .groupBy("date")
+            .map((date, id) =>
+                    filtered.push({
+                    _id:id,
+                    displayOrder: 1,
+                    date: id,
+                    formType:"Summary",
+                    week: moment(id, "YYYY-MM-DD").week(),
+                    groupByColumn :id,
+                    workOrder: "",
+                    hours: _.sumBy(date, "hours"),
+                })
+            ).value();
         _.groupBy(filtered, "date")
         }
 
@@ -237,20 +228,19 @@ class TimeEntries extends Component {
             sortColumn.path = "date";
             sortColumn.order= "desc"
         }
-            const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
         return {data: sorted}
     }
     
     columns = [
         {path:"week", label: "Week", width: "1"},
         { path: "date",label: "Date",width: "2"},
-        { path: "workOrder.name", label: "Work Order Number", width: "2" },
-        { path: "workOrder.description", label: "Work Order Description", width: "4" },
+        { path: "workOrderName", label: "Work Order Number", width: "2" },
+        { path: "workOrderDesc", label: "Work Order Description", width: "4" },
         { path: "hours", label: "Hours", width: 1 },
     ];
 
     handleSort = (sortColumn) => {
-        console.log("sortColumn", sortColumn);
         this.setState({ sortColumn });
     };
     
@@ -291,7 +281,6 @@ class TimeEntries extends Component {
             weekArray
         } = this.state
         
-        console.log("time entry data",data)
         const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);
@@ -306,7 +295,7 @@ class TimeEntries extends Component {
         }
 
         return (
-            <div style={{backgroundColor: "#eee"}}>
+            <div>
                 <div className="row">
                     <div className="col-1">
                         <button
@@ -360,9 +349,7 @@ class TimeEntries extends Component {
                                 onDelete={this.handleDelete}
                                 onSave={this.handleSave}
                             />
-                   
                         </li>
-                            
                     ))}
                 </ul>
             </div>

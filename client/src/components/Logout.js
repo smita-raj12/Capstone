@@ -1,9 +1,9 @@
 import  {  useEffect } from 'react';
 import auth from '../services/authService';
 
-function Logout ()  {
+function Logout()  {
     
-    useEffect(() =>{
+    useEffect(() => {
         auth.logout();
         window.location='/'
     }, []);

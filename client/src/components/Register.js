@@ -40,10 +40,12 @@ class RegisterForm extends Form {
     }
         
     }
+    
     customValidation = (input) => {
     }
+
     render() { 
-       
+
         return (
         <div>
             <h1>Register</h1> 

@@ -67,7 +67,7 @@ class WorkOrders extends Component {
     
     return (
       
-      <div style={{backgroundColor: "#eee"}}> 
+      <div> 
         <ul className="list-group">
         {workOrders.map((item) => {
           return <li  key={item._id}
