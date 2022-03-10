@@ -20,16 +20,13 @@ router.post("/", (req, res)=>{
   const workOrderInsert = "INSERT INTO workorders (name, description) VALUES (?,?);"
   
   db.query(workOrderInsert, [name, description], (err, result)=>{
-  console.log(err);
-  if(err) console.log(err);
-  if (!result){
-      return res
-      .status(404)
-      .send("The timeEntry with the given ID was not found.");
-  }
-  console.log("result",result)
-  res.send(result);
-
+    if(err) console.log(err);
+    if (!result){
+        return res
+        .status(404)
+        .send("The timeEntry with the given ID was not found.");
+    }
+    res.send(result);
   }); 
 });
 
