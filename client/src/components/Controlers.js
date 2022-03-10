@@ -23,19 +23,18 @@ class Controlers extends Component {
         selectedWeek:null
     };
 
-      columns = [
+    columns = [
         { path: "date", label: "Date" },
         { path: "workOrderName", label: "Work Order Number" },
         { path: "workOrderDesc", label: "Work Order Description" },
         { path: "hours", label: "Hours" },
         { path: "week", label: "Week" },
         { path: "userName", label: "userName" }
-      ];
+    ];
 
-      async componentDidMount() {
+    async componentDidMount() {
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntries();
-       
         const timeEntries = data.map(o=>({
             _id : o._id,
             userName:o.userName,
@@ -79,13 +78,13 @@ class Controlers extends Component {
             weekNumber = moment(currentDate, "YYYY-MM-DD").week();
      
             if (weekNumber !== prevWeekNumber) {
-            weekArray.push({
-                _id: y,
-                name: weekNumber,
-            });
-            prevWeekNumber = weekNumber;
-            y = y +1;
-        }
+                weekArray.push({
+                    _id: y,
+                    name: weekNumber,
+                });
+                prevWeekNumber = weekNumber;
+                y = y +1;
+            }
         }    
         this.setState({timeEntries, workOrders, dateArray, startDate,weekArray })
     } 
@@ -103,7 +102,6 @@ class Controlers extends Component {
     };
 
     handleWorkOrderSelect = (workOrder) => {
-
         this.setState({
             selectedWorkOrder: parseInt(workOrder),
         });
@@ -127,26 +125,23 @@ class Controlers extends Component {
                 selectedWorkOrder,
                 workOrders,
                 startDate,
-                dateArray,
                 selectedDate,
                 selectedWeek
             } = this.state
             
-            const timeentriesWithinDateRange = timeEntries.filter((m) =>
+        const timeentriesWithinDateRange = timeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
         
         var filtered = timeentriesWithinDateRange;
-        let groupByColumn = [];
         let groupByColumnValue = " ";
         let i = 0;           
-        groupByColumn[i]="date"
-
+       
         if (selectedWorkOrder) {
-            console.log(filtered)
+            
             filtered = filtered.filter((m) => m.workOrderId === selectedWorkOrder);
             i = i+1
-            groupByColumn[i] = "workOrder";
+            
             groupByColumnValue = workOrders
                 .filter((o) => o._id === selectedWorkOrder)
                 .map((o) => o.name).toString();
@@ -154,14 +149,14 @@ class Controlers extends Component {
         if (selectedDate) {
             filtered = filtered.filter((m) => m.date === selectedDate);
             i = i+1
-            groupByColumn[i] = "date";
+           
             groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
-            console.log("groupByColumnValue",groupByColumnValue)
+            
         }
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
             i=i+1
-            groupByColumn[i] = "week";
+          
             groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
         }
         return {data:filtered}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class TableHeader extends Component {
+
     raiseSort = path => {
         const sortColumn = {...this.props.sortColumn}
         if (sortColumn.path===path)
@@ -14,13 +15,13 @@ class TableHeader extends Component {
 
     renderSortIcon = column =>{
         const { sortColumn} = this.props
-
         if (column.path !== sortColumn.path ) return null;
         if (sortColumn.order ==='asc' ) return <i className="fa fa-sort-asc"/>;
         return <i className="fa fa-sort-desc"></i>
     }
 
     render() { 
+        
         return (
             <thead className="thead-dark" >
                 <tr className="table-dark" >

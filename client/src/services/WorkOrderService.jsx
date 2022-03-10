@@ -5,7 +5,6 @@ export function getWorkOrders() {
 }
 
 export function saveWorkOrder(workOrder){
-    console.log(workOrder)
     if (workOrder._id !== 0) {
         const body = { ...workOrder };
         delete body._id;

@@ -3,7 +3,6 @@ import http from "./httpServices";
 const apiEndpoint = "/timeEntry";
 
 function timeEntryUrl(id) {
-  console.log(id)
   return `${apiEndpoint}/${id}`;
 }
 
@@ -16,7 +15,6 @@ function timeEntryUrlMaxId() {
 }
 
 export function getTimeEntries() {
-  console.log("time entry services");
     return http.get(apiEndpoint);
 }
 

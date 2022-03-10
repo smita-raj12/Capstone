@@ -34,23 +34,23 @@ function App() {
       <ToastContainer />
       <Router>
           <div className="container">
-          <NavBar user = {user}/>
-          <Switch>
-            <Route path="/Register" component={Register} />
-            <Route path="/Login" component={Login} />
-            <Route path="/Logout" component={Logout} />
+            <NavBar user = {user}/>
+            <Switch>
+              <Route path="/Register" component={Register} />
+              <Route path="/Login" component={Login} />
+              <Route path="/Logout" component={Logout} />
 
-            <ProtectedRoute path="/TimeEntries" 
-            render = {(props)=>(
-              <TimeEntries {...props} emailId = {user.id} />
-            )} role = {"ANY"}  />
-            
-            <ProtectedRoute path="/WorkOrders" component={WorkOrders} role = {"ANY"}/>
-            <ProtectedRoute path="/Controlers" component={Controlers} role = {"MANAGER"} />
-            <Route path="/PageNotFound" component={PageNotFound} />
-            <Redirect from="/" exact to="/TimeEntries" />
-            <Redirect to="/PageNotFound" />
-          </Switch>
+              <ProtectedRoute path="/TimeEntries" 
+              render = {(props)=>(
+                <TimeEntries {...props} emailId = {user.id} />
+              )} role = {"ANY"}  />
+              
+              <ProtectedRoute path="/WorkOrders" component={WorkOrders} role = {"ANY"}/>
+              <ProtectedRoute path="/Controlers" component={Controlers} role = {"MANAGER"} />
+              <Route path="/PageNotFound" component={PageNotFound} />
+              <Redirect from="/" exact to="/TimeEntries" />
+              <Redirect to="/PageNotFound" />
+            </Switch>
           </div>  
       </Router>
     </React.Fragment>
