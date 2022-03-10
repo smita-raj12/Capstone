@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
 
+
 class Controlers extends Component {
 
     state = {
@@ -14,6 +15,7 @@ class Controlers extends Component {
         timeEntries:[],
         workOrders: [],
         dateArray: [],
+        weekArray:[],
         startDate: "2021-01-01",
         sortColumn: { path: "title", order: "Desc" },
         selectedWorkOrder: null,
@@ -47,6 +49,9 @@ class Controlers extends Component {
         }))
         
         var dateArray = [];
+        var weekArray = [];
+        let prevWeekNumber = [];
+        let weekNumber = " ";
 
         var currentDate = moment(
             moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
@@ -61,7 +66,8 @@ class Controlers extends Component {
         );
 
         var x = 0
-        
+        var y = 0
+
         while (currentDate <= stopDate) {
 
             dateArray.push({
@@ -70,8 +76,18 @@ class Controlers extends Component {
             });
             currentDate = moment(currentDate).add(1, "days");
             x = x + 1;
+            weekNumber = moment(currentDate, "YYYY-MM-DD").week();
+     
+            if (weekNumber !== prevWeekNumber) {
+            weekArray.push({
+                _id: y,
+                name: weekNumber,
+            });
+            prevWeekNumber = weekNumber;
+            y = y +1;
+        }
         }    
-        this.setState({timeEntries, workOrders, dateArray, startDate })
+        this.setState({timeEntries, workOrders, dateArray, startDate,weekArray })
     } 
 
     handleSort = (sortColumn) => {
@@ -98,6 +114,12 @@ class Controlers extends Component {
         const selectedDate = dateArray[date].name;
         this.setState({ selectedDate });
     };
+    
+    handleWeekSelect = (week) => {
+        const { weekArray } = this.state;
+        const selectedWeek = weekArray[week].name;
+        this.setState({ selectedWeek});
+    };
 
     getPageData(){
 
@@ -106,25 +128,14 @@ class Controlers extends Component {
                 workOrders,
                 startDate,
                 dateArray,
-                selectedDate
+                selectedDate,
+                selectedWeek
             } = this.state
             
             const timeentriesWithinDateRange = timeEntries.filter((m) =>
             moment(m.date).isSameOrAfter(startDate)
         );
         
-
-        dateArray.map((o, id) =>
-        timeentriesWithinDateRange.push({
-                displayOrder:1,
-                date: o.name,
-                _id: o.id,
-                week: moment(o.name, "YYYY-MM-DD").week(),
-                workOrder: 0,
-                hours: 0,
-        })
-        );
-
         var filtered = timeentriesWithinDateRange;
         let groupByColumn = [];
         let groupByColumnValue = " ";
@@ -147,27 +158,40 @@ class Controlers extends Component {
             groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
             console.log("groupByColumnValue",groupByColumnValue)
         }
+        if (selectedWeek) {
+            filtered = filtered.filter((m) => m.week === selectedWeek);
+            i=i+1
+            groupByColumn[i] = "week";
+            groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
+        }
         return {data:filtered}
     } 
 
     render() {
-       
         const  {data}  = this.getPageData();
-        console.log(data)
+        
     const { 
         sortColumn,  
         workOrders, 
         selectedWorkOrder,
         selectedDate,
-        dateArray} = this.state;
+        dateArray,
+        weekArray,
+        selectedWeek} = this.state;
    
     let selectedWorkOrder1 = " ";
     if (selectedWorkOrder){
         selectedWorkOrder1 = selectedWorkOrder;
     }
-    const dateId = dateArray
+
+            const dateId = dateArray
             .filter((o) => o.name === selectedDate)
             .map((o) => o._id);
+    
+            const weekId = weekArray
+            .filter((o) => o.name === selectedWeek)
+            .map((o) => o._id);      
+
     return (
         <div style={{backgroundColor: "#eee"}}>
         <div className="row">
@@ -193,6 +217,14 @@ class Controlers extends Component {
                 options={dateArray}
                 value={dateId}
                 onChange={this.handleDateSelect}
+                />
+            </div>
+            <div className="col-1">
+                <SelectBox
+                name="Week"
+                options={weekArray}
+                value={weekId}
+                onChange={this.handleWeekSelect}
                 />
             </div>
         </div>  
