@@ -209,6 +209,7 @@ class Controlers extends Component {
                 options={workOrders}
                 value={selectedWorkOrder1}
                 onChange={this.handleWorkOrderSelect}
+                
                 />
             </div>
             <div className="col-2">

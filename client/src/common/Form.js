@@ -19,16 +19,14 @@ class Form extends Component {
     const data = { ...this.state.data };
     data[input.name] = input.value;
     this.setState({ data, errors });
-    // console.log("errors",errors)
-
-    if (!errors)
-     { const customError = this.customValidation(input);
-      if (customError) errors[input.name] = customError;
-      else delete errors[input.name];
-     }
     
-
-    this.setState({ data, errors });
+    if (!errors)
+      { 
+        const customError = this.customValidation(input);
+        if (customError) errors[input.name] = customError;
+        else delete errors[input.name];
+      }
+      this.setState({ data, errors });
   };
 
   handleSubmit = (e) => {
@@ -36,19 +34,15 @@ class Form extends Component {
     const errors = this.validate();
     this.setState({ errors: errors || {} });
     if (errors) return;
-
     this.doSubmit();
   };
 
   validate = () => {
     const options = { abortEarly: false };
     const { error } = Joi.validate(this.state.data, this.schema, options);
-    //console.log(error)
     if (!error) return null;
-    
     const errors = {};
     for (let item of error.details) errors[item.path[0]] = item.message;
-
     return errors;
   };
 
@@ -56,7 +50,6 @@ class Form extends Component {
     const obj = { [name]: value };
     const schema = { [name]: this.schema[name] };
     const { error } = Joi.validate(obj, schema);
-    // if (error) console.log("error.details[0].message",error.details[0].message)
     return error ? error.details[0].message : null;
   };
 
@@ -64,7 +57,6 @@ class Form extends Component {
     return (
       <button
         disabled={this.validate()}
-        //onClick={() => this.props.onSave(this.state.data)}
         className="btn btn-dark mt-3"
       >
         {label}
