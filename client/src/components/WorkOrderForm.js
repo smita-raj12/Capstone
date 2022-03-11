@@ -10,8 +10,8 @@ class WorkOrderForm extends Form {
     }
     schema ={
         _id  : Joi.number(),
-        name : Joi.string().required(),
-        description : Joi.string().required(),
+        name : Joi.string().min(6).required(),
+        description : Joi.string().min(4).max(255).required(),
         
     }
 
