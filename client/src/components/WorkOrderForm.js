@@ -59,7 +59,7 @@ class WorkOrderForm extends Form {
                         </div>
                         <div className="col-1">
                             <button 
-                                onClick={() => this.props.onDelete(this.props.workOrder)} 
+                                onClick={() => this.props.onDelete(this.props.workOrder)} disabled = {this.props.workOrder._id ===0}
                                 className="btn-danger btn-sm mt-3">
                                 Delete
                             </button>

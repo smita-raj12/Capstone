@@ -30,17 +30,7 @@ class TimeEntryForm extends Form {
     };
 
     async populateWorkOrder() {
-        const { data }  =  await getWorkOrders();
-        let workOrders = [];
-        
-        data.map((o) =>
-            workOrders.push({
-                _id: o._id,
-                name: o.name,
-                description: o.description,
-            })
-        );
-       
+        const { data:workOrders }  =  await getWorkOrders();
         this.setState({ workOrders });
     }
     
@@ -66,8 +56,9 @@ class TimeEntryForm extends Form {
     };
 
     handleSelect(workOrderId) {
-        var selectedWorkOrder = this.state.workOrders.filter(
-            (m) => m._id !== workOrderId
+        const {workOrders} = this.state
+        var selectedWorkOrder = workOrders.filter(
+            (m) => m._id === parseInt(workOrderId)
         );
         const selecteddescription = selectedWorkOrder.map((o) => o.description);
         return !workOrderId ? " " : selecteddescription;
@@ -90,38 +81,36 @@ class TimeEntryForm extends Form {
         const { date } = this.state.data;
     
         var customError = " ";
-        var totalHoursperday = 0;
+        var totalHoursPerDay = 0;
 
         this.populateTimeEntries();
-        const origionaltimeEntries = this.state.timeEntries;
+        const origionalTimeEntries = this.state.timeEntries;
        
-        const timeEntriesforthedate = origionaltimeEntries.filter(
+        const timeEntriesForTheDate = origionalTimeEntries.filter(
             (m) => m.date === date
         );
     
         if (input.name === "hours") {
-            totalHoursperday = input.value;
+            totalHoursPerDay = input.value;
         }
     
-        for (let i = 0; i < timeEntriesforthedate.length; i++) {
+        for (let i = 0; i < timeEntriesForTheDate.length; i++) {
             if (input.name === "workOrderId") {
                 if (
-                    timeEntriesforthedate[i].date === date &&
-                    timeEntriesforthedate[i].workOrderId === input.value
+                    timeEntriesForTheDate[i].date === date &&
+                    timeEntriesForTheDate[i].workOrderId === input.value
                 ) {
                     return (customError = "Duplicate work order ");
                 }
             }
-    
             if (input.name === "hours") {
-                totalHoursperday =
-                    parseInt(totalHoursperday) + timeEntriesforthedate[i].hours;
-                if (totalHoursperday > 24) {
+                totalHoursPerDay =
+                    parseInt(totalHoursPerDay) + timeEntriesForTheDate[i].hours;
+                if (totalHoursPerDay > 24) {
                     return (customError = "Total hours per day can't be more than 24 ");
                 }
             }
         }
-    
         return customError > " " ? customError : null;
     };
     
@@ -132,9 +121,8 @@ class TimeEntryForm extends Form {
         return (
             <div>
                 {timeEntry.formType === "Summary" && (
-                    
                     <div className="row m-2" style={{backgroundColor: "rgb(84, 102, 150)"}}>
-                        <div className="col-3" >{timeEntry.groupByColumn}</div>
+                        <div className="col-3 m-2" >{timeEntry.groupByColumn}</div>
                         <div className="col-6 m-2">=====================Total=========</div>
                         <div className="col m-2">{timeEntry.hours}</div>
                     </div>
@@ -161,7 +149,7 @@ class TimeEntryForm extends Form {
                                 )}
                             </div>
 
-                            <div className="col-4">
+                            <div className="col-4 mt-4">
                                 {this.handleSelect(this.state.data.workOrderId)}
                             </div>
 
