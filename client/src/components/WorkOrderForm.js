@@ -10,9 +10,8 @@ class WorkOrderForm extends Form {
     }
     schema ={
         _id  : Joi.number(),
-        name : Joi.string().min(6).required(),
+        name : Joi.string().min(7).required(),
         description : Joi.string().min(4).max(255).required(),
-        
     }
 
     doSubmit = async ()=>{

@@ -3,7 +3,7 @@ import logger from "./logger";
 import {toast} from 'react-toastify'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
-console.log("axios.defaults.baseURL",process.env,axios.defaults.baseURL)
+//console.log("axios.defaults.baseURL",process.env,axios.defaults.baseURL)
 axios.interceptors.response.use(null,error=>{
     const expectedError =   error.response && 
                             error.response.status >= 400 && 

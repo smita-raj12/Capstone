@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
 import SearchIcon from '@material-ui/icons/Search';
+import { getUsers } from '../services/registrationService';
+
 
 class Controlers extends Component {
 
@@ -20,7 +22,9 @@ class Controlers extends Component {
         sortColumn: { path: "title", order: "Desc" },
         selectedWorkOrder: null,
         selectedDate: null,
-        selectedWeek:null
+        selectedWeek:null,
+        selectedUserName:null,
+        users : []
     };
 
     columns = [
@@ -33,6 +37,14 @@ class Controlers extends Component {
     ];
 
     async componentDidMount() {
+        const {data:userdata} = await getUsers();
+        const users = userdata  .map(o=>({
+            _id : o.id,
+            name: o.name,
+         
+
+        }))
+        console.log("controlers users",users);
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntries();
         const timeEntries = data.map(o=>({
@@ -51,7 +63,7 @@ class Controlers extends Component {
         var weekArray = [];
         let prevWeekNumber = [];
         let weekNumber = " ";
-
+         
         var currentDate = moment(
             moment(moment(), "YYYY-MM-DD").subtract(90, "days").format("YYYY-MM-DD")
         );
@@ -86,7 +98,7 @@ class Controlers extends Component {
                 y = y +1;
             }
         }    
-        this.setState({timeEntries, workOrders, dateArray, startDate,weekArray })
+        this.setState({timeEntries, workOrders, dateArray, startDate,weekArray, users })
     } 
 
     handleSort = (sortColumn) => {
@@ -97,7 +109,8 @@ class Controlers extends Component {
         const selectedWorkOrder = null;
         const selectedDate = null;
         const selectedWeek = null;
-        this.setState({ selectedWorkOrder, selectedDate, selectedWeek });
+        const selectedUserName = null;
+        this.setState({ selectedWorkOrder, selectedDate, selectedWeek, selectedUserName });
     };
 
     handleWorkOrderSelect = (workOrder) => {
@@ -117,6 +130,17 @@ class Controlers extends Component {
         const selectedWeek = weekArray[week].name;
         this.setState({ selectedWeek});
     };
+    
+    handleUserSelect = (userName) => {
+        console.log("user  ",userName)
+        const {users}  = this.state 
+        const selectedUserName = users[userName - 1].name;
+        console.log("selectedUserName  ",selectedUserName)
+        
+        this.setState({
+            selectedUserName:  selectedUserName,
+        });
+    };
 
     getPageData(){
 
@@ -125,7 +149,8 @@ class Controlers extends Component {
                 workOrders,
                 startDate,
                 selectedDate,
-                selectedWeek
+                selectedWeek,
+                selectedUserName
             } = this.state
             
         const timeentriesWithinDateRange = timeEntries.filter((m) =>
@@ -150,6 +175,9 @@ class Controlers extends Component {
             filtered = filtered.filter((m) => m.week === selectedWeek);
         }
 
+        if (selectedUserName) {
+            filtered = filtered.filter((m) => m.userName === selectedUserName);
+        }
         return {data:filtered}
     } 
 
@@ -163,8 +191,11 @@ class Controlers extends Component {
             selectedDate,
             dateArray,
             weekArray,
-            selectedWeek} = this.state;
+            selectedWeek, 
+            users,
+            selectedUserName} = this.state;
     
+        console.log("users",users)
         let selectedWorkOrder1 = " ";
         if (selectedWorkOrder){
             selectedWorkOrder1 = selectedWorkOrder;
@@ -177,7 +208,7 @@ class Controlers extends Component {
         const weekId = weekArray
             .filter((o) => o.name === selectedWeek)
             .map((o) => o._id);      
-
+        
         return (
             <div>
                 <div className="row">
@@ -188,6 +219,14 @@ class Controlers extends Component {
                         >
                         Reset
                         </button>
+                    </div>
+                    <div className="col-2">
+                        <SelectBox
+                            name="User"
+                            options={users}
+                            value={selectedUserName}
+                            onChange={this.handleUserSelect}
+                        />
                     </div>
                     <div className="col-2">
                         <SelectBox

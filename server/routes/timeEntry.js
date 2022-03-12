@@ -32,7 +32,7 @@ router.post("/",[auth], (req, res)=>{
   
   db.query(sqlInsert, [date, workOrderId, hours, emailId], (err, result)=>{
   if(err) return res.status(400).send(error.details[0].message)
-  return res.send(result)
+  if(result) return res.status(200).send(result)
   }); 
 });
 

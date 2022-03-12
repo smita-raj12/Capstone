@@ -117,7 +117,7 @@ class TimeEntryForm extends Form {
     
     render() {
         const { timeEntry } = this.props;
-
+        
         return (
             <div>
                 {timeEntry.formType === "Summary" && (
@@ -154,14 +154,14 @@ class TimeEntryForm extends Form {
                             </div>
 
                             <div className="col-1">
-                                {this.renderInput("hours", "Hours")}
+                                {this.renderInput("hours", "Hours", "Number")}
                             </div>
 
                             <div className="col">{this.renderButton("Save")}</div>
                             
                             <div className="col">
                             <button 
-                                onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType ==="New"}
+                                onClick={() => this.props.onDelete(this.props.timeEntry)} disabled ={timeEntry.formType === "New"}
                                 className="btn-danger btn-sm mt-3">
                                 Delete
                             </button>

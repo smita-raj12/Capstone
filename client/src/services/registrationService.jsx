@@ -9,3 +9,8 @@ export function register(user) {
     name: user.name,
   });
 }
+
+export function getUsers() {
+  return http.get(apiEndpoint);
+}
+

@@ -90,20 +90,23 @@ class TimeEntries extends Component {
     }
         
     handleSave =  async (timeEntry) => {
-
+        var {maxId} = this.state
         try {
             const { data: newTimeEntry } = await saveTimeEntry(timeEntry);
+            
+            maxId += 1
             if (timeEntry.formType ==="New") {
                 const timeEntries = this.state.timeEntries;
-        
+                
                 timeEntries.push({
-                    _id: newTimeEntry._id,
+                    _id: newTimeEntry.insertId,
                     date: timeEntry.date,
                     week: moment(timeEntry.date, "YYYY-MM-DD").week(),
-                    workOrder: " ",
-                    hours: " ",
+                    workOrderId:timeEntry.workOrderId,
+                    hours: parseInt(timeEntry.hours),
+                    formType: "data"
                 });
-                this.setState({ timeEntries });
+                this.setState({ timeEntries, maxId });
             }
         } catch (ex) {
             if (ex.response) console.log("ex.repsonse", ex.response);
@@ -146,12 +149,11 @@ class TimeEntries extends Component {
             moment(m.date).isSameOrAfter(startDate)
         );
         
-
         dateArray.map((o, id) =>
         timeentriesWithinDateRange.push({
                 displayOrder:1,
                 date: o.name,
-                _id: maxId + id,
+                _id: maxId + id+1000,
                 week: moment(o.name, "YYYY-MM-DD").week(),
                 workOrder: 0,
                 hours: 0,
@@ -179,16 +181,21 @@ class TimeEntries extends Component {
             filtered = filtered.filter((m) => m.date === selectedDate);
             i = i+1
             groupByColumn[i] = "date";
-            groupByColumnValue = groupByColumnValue + ' / ' + selectedDate;
+            if (groupByColumnValue > " ")
+                {groupByColumnValue = groupByColumnValue + '/' + selectedDate;}
+            else groupByColumnValue =  selectedDate
+
         }
     
         if (selectedWeek) {
             filtered = filtered.filter((m) => m.week === selectedWeek);
             i=i+1
             groupByColumn[i] = "week";
-            groupByColumnValue = groupByColumnValue + ' / ' + selectedWeek;
+            if (groupByColumnValue > " ")
+                  {groupByColumnValue = groupByColumnValue + '/' + selectedWeek;}
+             else groupByColumnValue =  selectedWeek
+            
         }
-        
         if (i !== 0) {
             _(filtered)
                 .groupBy( groupByColumn )
@@ -336,7 +343,7 @@ class TimeEntries extends Component {
                     sortColumn={sortColumn}
                     onSort={this.handleSort}
                 />
-               
+
                 <ul className="list-group">
                     {data.map((item) => (
                         <li
