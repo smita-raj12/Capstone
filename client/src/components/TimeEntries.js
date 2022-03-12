@@ -192,8 +192,8 @@ class TimeEntries extends Component {
             i=i+1
             groupByColumn[i] = "week";
             if (groupByColumnValue > " ")
-                  {groupByColumnValue = groupByColumnValue + '/' + selectedWeek;}
-             else groupByColumnValue =  selectedWeek
+                {groupByColumnValue = groupByColumnValue + '/' + selectedWeek;}
+            else groupByColumnValue =  selectedWeek
             
         }
         if (i !== 0) {

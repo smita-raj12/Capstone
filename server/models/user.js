@@ -34,7 +34,6 @@ function validateUser(user) {
     role: Joi.string()
       .min(3)
       .max(15)
-      .required()  
   };
 
   return Joi.validate(user, schema);
