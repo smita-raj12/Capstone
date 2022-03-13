@@ -5,7 +5,7 @@ import { getTimeEntries } from "../services/TimeEntriesService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
-import SearchIcon from '@material-ui/icons/Search';
+//import SearchIcon from '@material-ui/icons/Search';
 import { getUsers } from '../services/registrationService';
 
 
@@ -234,7 +234,7 @@ class Controlers extends Component {
                             options={workOrders}
                             value={selectedWorkOrder1}
                             onChange={this.handleWorkOrderSelect}
-                        ><div><SearchIcon /></div></SelectBox>
+                        ></SelectBox>
                     </div>
                     <div className="col-2">
                         <SelectBox
