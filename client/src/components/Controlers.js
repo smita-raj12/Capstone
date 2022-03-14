@@ -38,7 +38,7 @@ class Controlers extends Component {
 
     async componentDidMount() {
         const {data:userdata} = await getUsers();
-        const users = userdata  .map(o=>({
+        const users = userdata.map(o=>({
             _id : o.id,
             name: o.name,
          

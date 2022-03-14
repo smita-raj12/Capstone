@@ -7,7 +7,7 @@ function validateTimeEntry(timeEntry) {
     date: Joi.date().required(),
     workOrderId: Joi.number().required(),
     hours: Joi.number().min(0).required(),
-    emailId: Joi.number().min(0).required(),
+    emailId: Joi.number().min(0),
 
   });
   return Joi.validate(timeEntry, schema);

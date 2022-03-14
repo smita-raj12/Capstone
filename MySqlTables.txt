@@ -1,0 +1,110 @@
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+--
+-- Host: localhost    Database: timeentrydatabase
+-- ------------------------------------------------------
+-- Server version	8.0.26
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `timeentries`
+--
+
+DROP TABLE IF EXISTS `timeentries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `timeentries` (
+  `_id` int NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `workOrderId` int NOT NULL,
+  `hours` int NOT NULL,
+  `emailId` int NOT NULL,
+  PRIMARY KEY (`_id`),
+  KEY `workOrderId` (`workOrderId`) /*!80000 INVISIBLE */,
+  KEY `emailId` (`emailId`),
+  CONSTRAINT `emailId` FOREIGN KEY (`emailId`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `workorderid` FOREIGN KEY (`workOrderId`) REFERENCES `workorders` (`_id`) ON DELETE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `timeentries`
+--
+
+LOCK TABLES `timeentries` WRITE;
+/*!40000 ALTER TABLE `timeentries` DISABLE KEYS */;
+INSERT INTO `timeentries` VALUES (1,'2022-02-25',1,18,9),(2,'2022-02-27',3,15,9),(7,'2022-02-18',2,13,9),(8,'2022-02-18',1,15,9),(9,'2022-03-13',2,5,9),(11,'2022-03-14',3,5,9),(13,'2022-03-14',12351,12,9),(17,'2022-03-15',12351,9,9),(18,'2022-03-14',12352,16,9),(19,'2022-03-14',12352,5,9),(20,'2022-03-13',12351,5,9),(21,'2022-03-13',3,6,9),(22,'2022-03-12',12352,9,9),(23,'2022-03-12',12352,9,9),(24,'2022-03-12',3,23,9),(25,'2022-03-16',3,12,9),(30,'2022-03-08',1,8,9),(31,'2022-03-08',1,8,9),(33,'2022-03-07',1,1,9),(34,'2022-03-05',1,1,9),(35,'2022-04-06',3,5,10),(36,'2022-04-05',12351,7,10),(37,'2022-04-06',3,2,9),(38,'2022-04-08',12353,7,10),(41,'2022-03-10',12360,3,10),(42,'2022-04-09',1,4,10),(70,'2022-04-07',12357,4,10),(71,'2022-04-07',12357,3,10),(76,'2022-04-07',12352,2,10),(77,'2022-04-06',12363,3,10),(86,'2022-04-07',3,2,10),(87,'2022-04-06',12353,2,10),(92,'2022-04-04',12346,4,10),(103,'2022-04-10',12360,3,10),(104,'2022-04-10',12356,3,10),(105,'2021-12-11',3,5,9),(107,'2022-04-10',12360,3,9),(108,'2022-04-11',12347,2,9),(109,'2022-04-11',12357,2,10);
+/*!40000 ALTER TABLE `timeentries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'user1','abc@abc.com','abcdefgh',NULL),(2,'user2','a@a.com','abcdefgh',NULL),(3,'user3','b@b.com','abcdefgh',NULL),(4,'user4','z@z.com','abcdefgh',NULL),(5,'user5','abc1@abc1.com','abcdefgh',NULL),(6,'user6','abc2@abc2.com','abcdefgh',NULL),(7,'user7','abc3@abc3.com','abcdefgh',NULL),(8,'user8','abc4@abc4.com','abcdefgh',NULL),(9,'user9','abc7@abc7.com','$2b$10$nGkMLWj72qhUPBn5ohfLbOb2Gh50ivS.5egWVD/pgSQSI8dKQgbxO','USER'),(10,'manager','abc5@abc5.com','$2b$10$iXr7wAipCGVU2rzbjA4mAOKySBL7olJjBAo7MuowViTH2I0o2omSO','MANAGER'),(11,'user11','abc9@abc9.com','abcdefgh',NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workorders`
+--
+
+DROP TABLE IF EXISTS `workorders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workorders` (
+  `_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12366 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workorders`
+--
+
+LOCK TABLES `workorders` WRITE;
+/*!40000 ALTER TABLE `workorders` DISABLE KEYS */;
+INSERT INTO `workorders` VALUES (1,'W111122','oregon solor description'),(2,'W222211','migrations'),(3,'W346849','Batory program intensive tracking'),(12346,'W334446',' capstone project complete'),(12347,'W333555',' AMI Oregon'),(12348,'W346842',' AMI Utah'),(12349,'W333444',' AMI CA'),(12351,'W333445',' AMI CA'),(12352,'W333445',' AMI NY'),(12353,'W333445',' AMI IL'),(12354,'W111122','oregon solor description'),(12355,'W222211','migrations'),(12356,'W334446',' capstone project complete'),(12357,'W333445',' AMI CA'),(12358,'W333443',' AMI NY'),(12360,'W334445',' capstone project complete'),(12362,'W334432',' AMI WA'),(12363,'W334488',' AMI AZ');
+/*!40000 ALTER TABLE `workorders` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-03-12 18:45:44

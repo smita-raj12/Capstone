@@ -54,17 +54,27 @@ password:abcdefgh
 
 ## Setup/Installation Requirements
 
+### For front-End
+
 1. Download or clone the [https://github.com/smita-raj12/capstone](https://github.com/smita-raj12/capstone) to your local machine.
 
 2. Download any Code Editor for your choice. (Here I used VSCode).
 
 3. Make sure Node has installed if not search it on google and follow the steps of node installation. 
 
-4. Open git BASH terminal and navigate to the tap-room, within the directory
+4. Open git BASH terminal and navigate to the client , within the directory
 Run `npm install` in the git BASH terminal to install dependencies. 
 
 
 5. View the website by visiting localhost:3000/ in a new web browser tab (such as google chrome)
+
+### For Back-End
+
+6. Navigate to server dir, within the directory Run `npm install` to install dependence. 
+
+7. To create tables with MySqlTables.txt copy the creating sql table quries and run these quries on sql workbench.
+
+8. Inside terminal run `node index.js` command to run Back-End code.
 
 ## Research & Planning Log
 
