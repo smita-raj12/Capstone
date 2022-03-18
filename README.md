@@ -51,6 +51,7 @@ password:abcdefgh
 11. Loadash
 12. Joi
 13. Moment
+14. MySQL workbench 
 
 ## Setup/Installation Requirements
 
@@ -74,7 +75,9 @@ Run `npm install` in the git BASH terminal to install dependencies.
 
 7. To create tables with MySqlTables.txt copy the creating sql table quries and run these quries on sql workbench.
 
-8. Inside terminal run `node index.js` command to run Back-End code.
+8. Make sure to change your password inside server/stratup/db.js file (Your-password to your mySQL workbencg password)
+
+9. Inside terminal run `node index.js` command to run Back-End code.
 
 ## Research & Planning Log
 
