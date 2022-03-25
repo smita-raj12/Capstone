@@ -28,13 +28,15 @@ This page is used by managers.
 [https://rocky-retreat-47177.herokuapp.com/Login](https://rocky-retreat-47177.herokuapp.com/Login)
 
 ### login for employee
-LoginId: abc7@abc7.com
-password:abcdefgh
+* LoginId: abc7@abc7.com
+* password:abcdefgh
 
 ### login for manager
 
-LoginId: abc5@abc5.com
-password:abcdefgh
+* LoginId: abc5@abc5.com
+* password:abcdefgh
+
+### Note:- Application works bit slow. 
 
 
 ## Technologies Used
