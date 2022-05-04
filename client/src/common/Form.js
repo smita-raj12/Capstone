@@ -12,7 +12,7 @@ class Form extends Component {
   handleChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-
+    console.log(errors)
     if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
 
@@ -27,12 +27,14 @@ class Form extends Component {
         if (customError) errors[input.name] = customError;
         else delete errors[input.name];
       }
+     
       this.setState({ data, errors });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const errors = this.validate();
+   const errors = this.validate();
+   console.log(errors)
     this.setState({ errors: errors || {} });
     if (errors) return;
     this.doSubmit();
@@ -58,7 +60,7 @@ class Form extends Component {
     
     return (
       <button
-        disabled={this.validate()}
+        //disabled={this.validate()}
         className="btn btn-dark mt-3"
       >
         {label}

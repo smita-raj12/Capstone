@@ -7,7 +7,7 @@ import * as userService from '../services/registrationService';
 class RegisterForm extends Form {
     
     state = {
-        data :{username:'',password:'',name:''},
+        data :{username:'',password:'',name:'', role:''},
         errors:{}
     }
 
@@ -23,6 +23,10 @@ class RegisterForm extends Form {
             .required()
             .min(5)
             .label("Name"),
+        role: Joi.string()
+            .required()
+            .min(2)
+            .label("Role")    
     }
 
     doSubmit=async()=>{
@@ -32,12 +36,12 @@ class RegisterForm extends Form {
             auth.loginWithJwt(response.headers['x-auth-token'])
             window.location='/'
         }catch(ex){
-        if (ex.response && ex.response.status === 400){
-            const errors = {...this.state.errors}
-            errors.username = ex.response.data;
-            this.setState({errors})
+            if (ex.response && ex.response.status === 400){
+                const errors = {...this.state.errors}
+                errors.username = ex.response.data;
+                this.setState({errors})
+            }
         }
-    }
         
     }
     
@@ -53,6 +57,11 @@ class RegisterForm extends Form {
             {this.renderInput("username","Username")}
             {this.renderInput("password","Password","password")}
             {this.renderInput("name","Name")}
+            <select>
+                {/* <option value="role">Role </option> */}
+                <option value="USER">USER</option>
+                <option value="MANAGER">MANAGER</option>
+            </select>
             {this.renderButton("Register")} 
             </form>
         </div> );

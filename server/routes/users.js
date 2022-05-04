@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
     var getUser = " "
     if(email) 
     { getUser = "SELECT * FROM users WHERE email = ?;"}
-    db.query(getUser, [email, password, name], (err, result)=>{
+    db.query(getUser, [email, password, name, role], (err, result)=>{
       console.log(err);
       if (!result) return res.status(400).send("User already registered.");
     }); 
