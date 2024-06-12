@@ -24,7 +24,6 @@ This page is used by managers.
 * Here managers can update work orders.
 * Here managers can remove work orders.  
 
-### Note:- Application works bit slow. 
 
 
 ## Technologies Used

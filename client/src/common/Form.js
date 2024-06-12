@@ -12,7 +12,7 @@ class Form extends Component {
   handleChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    console.log(errors)
+  
     if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
 
@@ -34,7 +34,7 @@ class Form extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
    const errors = this.validate();
-   console.log(errors)
+  
     this.setState({ errors: errors || {} });
     if (errors) return;
     this.doSubmit();

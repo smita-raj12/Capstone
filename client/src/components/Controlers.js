@@ -41,10 +41,8 @@ class Controlers extends Component {
         const users = userdata.map(o=>({
             _id : o.id,
             name: o.name,
-         
-
         }))
-        console.log("controlers users",users);
+
         const  { data: workOrders }  =  await getWorkOrders();
         const { data } = await getTimeEntries();
         const timeEntries = data.map(o=>({
