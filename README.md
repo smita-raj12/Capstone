@@ -25,7 +25,6 @@ This page is used by managers.
 * Here managers can remove work orders.  
 
 
-
 ## Technologies Used
 1. Bootstrap 
 2. Express
