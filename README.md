@@ -24,18 +24,6 @@ This page is used by managers.
 * Here managers can update work orders.
 * Here managers can remove work orders.  
 
-## Live Site Link 
-[https://rocky-retreat-47177.herokuapp.com/Login](https://rocky-retreat-47177.herokuapp.com/Login)
-
-### login for employee
-* LoginId: abc7@abc7.com
-* password:abcdefgh
-
-### login for manager
-
-* LoginId: abc5@abc5.com
-* password:abcdefgh
-
 ### Note:- Application works bit slow. 
 
 
