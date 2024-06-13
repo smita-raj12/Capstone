@@ -5,7 +5,6 @@ import { getTimeEntries } from "../services/TimeEntriesService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBox from './SelectBox';
 import { getWorkOrders } from '../services/WorkOrderService';
-//import SearchIcon from '@material-ui/icons/Search';
 import { getUsers } from '../services/registrationService';
 
 

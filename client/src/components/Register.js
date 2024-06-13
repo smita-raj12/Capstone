@@ -58,7 +58,6 @@ class RegisterForm extends Form {
             {this.renderInput("password","Password","password")}
             {this.renderInput("name","Name")}
             <select>
-                {/* <option value="role">Role </option> */}
                 <option value="USER">USER</option>
                 <option value="MANAGER">MANAGER</option>
             </select>
